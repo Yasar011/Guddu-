@@ -2,378 +2,542 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Guddu's 21st Mission</title>
-    <!-- Confetti Library -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Orbitron:wght@900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Special Girl... 💌</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         :root {
-            --zenitsu-gold: #FFD700;
-            --soft-pink: #ffb7c5;
-            --demon-red: #ff4757;
-            --bg-dark: #1e272e;
+            --bg-color: #ffcccc;
+            --blob-color: #ffffff;
+            --text-color: #555555;
         }
-
-        * { box-sizing: border-box; }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--bg-dark);
-            color: white;
-            font-family: 'Poppins', sans-serif;
-            overflow: hidden;
-            height: 100vh;
-            width: 100vw;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: radial-gradient(circle at center, #2f3640 0%, #000000 100%);
+            margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-height: 100vh; background-color: var(--bg-color); font-family: 'Nunito', sans-serif;
+            text-align: center; color: var(--text-color); transition: background-color 1s ease;
+            overflow: hidden; position: relative;
+            user-select: none;
         }
 
-        /* --- SAKURA BACKGROUND ANIMATION --- */
-        .sakura {
-            position: absolute;
-            background-color: var(--soft-pink);
-            border-radius: 100% 0 100% 0;
-            opacity: 0.6;
-            animation: fall linear infinite;
-            z-index: 1;
+        /* --- Envelope Intro Screen --- */
+        #intro-screen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffb3c6;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 100; transition: opacity 1s ease, transform 1s ease;
         }
 
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(720deg); }
+        .envelope {
+            width: 150px; height: 100px; background-color: #fff; position: relative; border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15); cursor: pointer; animation: bounce 2s infinite ease-in-out;
+            display: flex; align-items: center; justify-content: center; font-size: 40px;
         }
 
-        /* --- UI CONTAINER --- */
-        .game-ui {
-            position: relative;
-            width: 90%;
-            max-width: 500px;
-            height: 85vh;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            z-index: 10;
-            box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        .envelope::before {
+            content: ''; position: absolute; top: 0; left: 0;
+            border-top: 50px solid #f2f2f2; border-right: 75px solid transparent; border-left: 75px solid transparent; z-index: 2;
         }
 
-        h1 {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--zenitsu-gold);
-            margin: 0;
-            text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-            text-align: center;
-            font-size: 1.8rem;
-            line-height: 1.2;
+        .envelope-text {
+            margin-top: 30px; font-family: 'Pacifico', cursive; font-size: 24px; color: #d6336c;
+            animation: pulse 1.5s infinite alternate;
         }
 
-        /* --- START SCREEN --- */
-        #start-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            text-align: center;
+        /* --- Main Story Container --- */
+        #main-content {
+            display: none; flex-direction: column; align-items: center; width: 100%; z-index: 10;
+        }
+
+        /* --- Animated Blob Character --- */
+        #character-container { position: relative; margin-bottom: 20px; cursor: pointer; z-index: 20;}
+
+        .blob {
+            width: 160px; height: 150px; background-color: var(--blob-color);
+            border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
+            box-shadow: 0 15px 25px rgba(0,0,0,0.08); position: relative;
+            animation: float 3s ease-in-out infinite; transition: all 0.5s ease;
+        }
+
+        .spin { animation: spinAround 0.8s ease-in-out !important; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.05); opacity: 1; } }
+        @keyframes spinAround { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
+
+        /* Facial Features */
+        .face { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; transition: all 0.3s ease; }
+        .eye { position: absolute; width: 14px; height: 14px; background-color: #444; border-radius: 50%; top: 40px; transition: all 0.3s ease; }
+        .eye.left { left: 45px; } .eye.right { right: 45px; }
+        .mouth { position: absolute; width: 20px; height: 10px; border-bottom: 3px solid #444; border-radius: 50%; top: 60px; left: 50%; transform: translateX(-50%); transition: all 0.3s ease; }
+        .blush { position: absolute; width: 25px; height: 12px; background-color: #ffb3b3; border-radius: 50%; top: 55px; opacity: 0; transition: opacity 0.3s ease; }
+        .blush.left { left: 25px; } .blush.right { right: 25px; }
+        .tear { position: absolute; width: 8px; height: 12px; background-color: #80c1ff; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; top: 55px; opacity: 0; }
+        .tear.left { left: 48px; } .tear.right { right: 48px; }
+
+        /* Emotions */
+        .sad .mouth { border-bottom: none; border-top: 3px solid #444; top: 65px; height: 12px; }
+        .crying .eye { height: 8px; border-radius: 10px; top: 43px; }
+        .crying .mouth { border-bottom: none; border-top: 3px solid #444; top: 65px; width: 15px;}
+        .crying .tear { opacity: 1; animation: cry 1s infinite linear; }
+        @keyframes cry { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(20px) scale(0.5); opacity: 0; } }
+        
+        /* Wiped tears state */
+        .wiped .tear { display: none !important; }
+        .wiped .blush { opacity: 0.8 !important; }
+
+        .pleading .eye { width: 18px; height: 18px; top: 38px; }
+        .pleading .eye::after { content: ''; position: absolute; width: 6px; height: 6px; background: white; border-radius: 50%; top: 2px; left: 2px; }
+        .pleading .mouth { width: 10px; height: 10px; border: 3px solid #444; border-radius: 50%; top: 62px; background: #ff9999;}
+        .pleading .blush { opacity: 0.6; }
+        .love .eye { background-color: transparent; }
+        .love .eye::before { content: '❤️'; font-size: 22px; position: absolute; top: -12px; left: -4px; animation: pulse 1s infinite alternate; }
+        .love .mouth { width: 20px; height: 15px; border-bottom: 3px solid #444; top: 55px; }
+        .love .blush { opacity: 0.8; }
+        .happy .eye { height: 4px; border-radius: 10px; top: 45px; }
+        .happy .mouth { width: 25px; height: 12px; border-bottom: 4px solid #444; top: 55px; }
+        .happy .blush { opacity: 1; }
+
+        /* --- Dialogue Box --- */
+        #dialogue-wrapper { position: relative; margin-bottom: 30px; z-index: 20; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; }
+        #dialogue-box {
+            background: white; padding: 25px 30px; border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 85%;
+            font-size: 20px; position: relative; line-height: 1.6; min-height: 110px;
+            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        }
+        #dialogue-box::after {
+            content: ''; position: absolute; top: -15px; left: 50%; margin-left: -15px;
+            border-width: 0 15px 15px 15px; border-style: solid; border-color: transparent transparent white transparent;
         }
         
-        .start-btn {
-            background: var(--demon-red);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            font-family: 'Orbitron', sans-serif;
-            margin-top: 20px;
-            cursor: pointer;
-            border-radius: 5px;
-            animation: pulse 1s infinite;
-            box-shadow: 0 0 20px var(--demon-red);
+        #message-text { display: inline-block; min-height: 80px; width: 100%; }
+        .typing-cursor { border-right: 2px solid #555; animation: blink 0.7s infinite; }
+        @keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: #555; } }
+
+        /* --- Interactive Elements (Slider & Promises) --- */
+        #interactive-container { width: 100%; margin-top: 15px; display: none; }
+        
+        /* Slider */
+        #slider-wrapper { display: none; width: 100%; flex-direction: column; align-items: center; background: #fff0f5; padding: 15px; border-radius: 15px; border: 2px dashed #ffb3c6; box-sizing: border-box;}
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 25px; width: 25px; border-radius: 50%; background: #ff4d88; cursor: pointer; box-shadow: 0 2px 6px rgba(255,77,136,0.4); margin-top: -10px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #ffcccc; border-radius: 5px; }
+        #slider-value { font-size: 24px; font-weight: bold; color: #ff4d88; font-family: 'Pacifico', cursive; margin-top: 5px;}
+
+        /* Promises */
+        #promises-wrapper { display: none; width: 100%; background: #fff0f5; padding: 15px; border-radius: 15px; box-sizing: border-box; text-align: left; border: 2px dashed #ffb3c6; }
+        .promise-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 16px; cursor: pointer; transition: transform 0.2s ease; }
+        .promise-item:hover { transform: translateX(5px); }
+        .promise-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: #ff4d88; cursor: pointer; flex-shrink: 0; }
+
+        /* Progress Dots */
+        #progress-dots { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
+        .dot { width: 8px; height: 8px; background-color: #ddd; border-radius: 50%; transition: all 0.3s ease; }
+        .dot.active { background-color: #ff4d88; transform: scale(1.3); }
+
+        /* --- Buttons --- */
+        .btn-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; min-height: 60px; position: relative; width: 100%; z-index: 20; }
+        button { background-color: #ff80aa; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 128, 170, 0.4); font-family: 'Nunito', sans-serif; }
+        button:hover { background-color: #ff4d88; transform: translateY(-2px); }
+        button:disabled { background-color: #ccc !important; cursor: not-allowed; box-shadow: none; transform: none; }
+        
+        #forgive-btn { display: none; background-color: #ff4d4d; }
+        #runaway-btn { display: none; background-color: #888; color: white; }
+
+        /* --- End Screen (Polaroid & Coupon) --- */
+        #end-presents { display: none; flex-direction: column; align-items: center; gap: 20px; z-index: 10; margin-top: 20px; }
+        
+        #polaroid {
+            width: 200px; height: 240px; background: white; padding: 10px 10px 40px 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); transform: rotate(-5deg);
+            animation: dropIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+        .polaroid-img { width: 100%; height: 100%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 1px dashed #ccc; font-size: 40px;}
+        .polaroid-text { position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; font-family: 'Pacifico', cursive; font-size: 16px; color: #555; }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-        /* --- GAME ELEMENTS --- */
-        .game-zone {
-            flex-grow: 1;
-            width: 100%;
-            position: relative;
-            border-radius: 10px;
-            background: rgba(0,0,0,0.3);
-            border: 1px dashed rgba(255,255,255,0.1);
-            overflow: hidden;
-            cursor: pointer;
-            margin-top: 10px;
+        #coupon {
+            background: #ffecb3; border: 2px dashed #ffb300; padding: 15px 25px; border-radius: 10px;
+            color: #d84315; font-weight: bold; font-size: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: rotate(3deg); animation: dropIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            display: flex; align-items: center; gap: 10px;
         }
+        
+        @keyframes dropIn { 0% { opacity: 0; transform: translateY(-50px) rotate(0); } 100% { opacity: 1; } }
 
-        .demon {
-            position: absolute;
-            font-size: 2.5rem;
-            user-select: none;
-            filter: drop-shadow(0 0 5px var(--demon-red));
-            transition: transform 0.1s;
-            animation: float 2.5s ease-in-out infinite;
+        /* --- Particle Effects --- */
+        #weather-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
+        .drop { position: absolute; background: rgba(255, 255, 255, 0.6); width: 2px; height: 15px; animation: rain linear infinite; }
+        @keyframes rain { 0% { transform: translateY(-100px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }
+        .sparkle { position: absolute; color: white; font-size: 20px; animation: twinkle 2s infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(180deg); } }
+        .heart-fly { position: absolute; color: #ff4d4d; font-size: 30px; animation: floatUp 4s linear forwards; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-20vh) scale(1.5); opacity: 0; } }
+
+        /* Floating Sweet Words */
+        .floating-word {
+            position: absolute; font-family: 'Pacifico', cursive; color: #ff3377;
+            font-size: 22px; pointer-events: none; z-index: 100; font-weight: bold;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
+            animation: floatWordAnim 2s ease-out forwards;
         }
-        .demon:active { transform: scale(0.8); }
+        @keyframes floatWordAnim { 0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } 20% { opacity: 1; transform: translate(-50%, -30px) scale(1.2); } 100% { transform: translate(-50%, -100px) scale(1); opacity: 0; } }
 
-        /* --- CAKE SCREEN --- */
-        .cake-screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            width: 100%;
-            text-align: center;
+        @media (max-width: 500px) {
+            #dialogue-box { font-size: 17px; padding: 20px; width: 85%; }
+            button { padding: 12px 25px; font-size: 16px; }
+            .promise-item { font-size: 14px; }
+            #coupon { font-size: 15px; padding: 10px 15px; }
         }
-
-        .cake-container {
-            font-size: 7rem;
-            cursor: pointer;
-            margin: 20px 0;
-            filter: drop-shadow(0 0 20px var(--zenitsu-gold));
-            transition: transform 0.3s;
-        }
-        .cake-container:hover { transform: scale(1.05); }
-
-        /* --- LETTER SCREEN --- */
-        .final-letter {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            width: 100%;
-            height: 100%;
-            padding: 10px;
-            overflow-y: auto;
-        }
-
-        .photo-frame {
-            width: 150px; 
-            height: 150px;
-            border-radius: 50%;
-            border: 4px solid var(--zenitsu-gold);
-            background-color: #333;
-            /* REPLACE THE LINK BELOW WITH A PHOTO URL IF YOU HAVE ONE */
-            background-image: url('https://media1.giphy.com/media/2YA7xL1PzM1a65xQ8I/giphy.gif');
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0 0 25px var(--zenitsu-gold);
-            margin-bottom: 15px;
-        }
-
-        .letter-content {
-            background: white;
-            color: #333;
-            padding: 15px;
-            border-radius: 10px;
-            width: 100%;
-            font-family: 'Dancing Script', cursive;
-            font-size: 1.4rem;
-            line-height: 1.3;
-            transform: rotate(-1deg);
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
-        }
-
-        .progress-bar {
-            height: 8px;
-            width: 0%;
-            background: linear-gradient(90deg, var(--zenitsu-gold), #fff);
-            border-radius: 4px;
-            transition: width 0.2s;
-        }
-
     </style>
 </head>
 <body>
 
-    <div id="sakura-container"></div>
+    <audio id="bg-music" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3" type="audio/mpeg">
+    </audio>
 
-    <div class="game-ui" id="main-ui">
-        
-        <!-- START SCREEN OVERLAY -->
-        <div id="start-screen">
-            <h1 style="color:var(--demon-red); font-size: 2.5rem;">WARNING</h1>
-            <p style="font-size:1.2rem; margin-top:10px;">Demons Detected at Birthday Party!</p>
-            <p style="color:#aaa; font-size:0.9rem;">Level 21 Unlocking...</p>
-            <button class="start-btn" onclick="initializeGame()">DEFEND GUDDU</button>
-        </div>
+    <div id="intro-screen">
+        <div class="envelope" onclick="startStory()">💌</div>
+        <div class="envelope-text">Tap to open...</div>
+    </div>
 
-        <!-- STAGE 1: GAME -->
-        <div id="game-stage" style="width:100%; height:100%; display:flex; flex-direction:column;">
-            <h1>Protect Guddu!</h1>
-            <p style="color:#ccc; font-size:0.9rem; margin-bottom:10px;">Tap 21 Demons!</p>
-            <div style="width:100%; background:#444; height:8px; border-radius:4px; margin-bottom:10px;">
-                <div class="progress-bar" id="bar"></div>
+    <div id="weather-container"></div>
+
+    <div id="main-content">
+        <!-- The Blob Character -->
+        <div id="character-container" onclick="handleBlobTap()">
+            <div id="blob" class="blob sad">
+                <div class="face">
+                    <div class="blush left"></div>
+                    <div class="blush right"></div>
+                    <div class="tear left"></div>
+                    <div class="tear right"></div>
+                    <div class="eye left"></div>
+                    <div class="eye right"></div>
+                    <div class="mouth"></div>
+                </div>
             </div>
-            <div class="game-zone" id="zone"></div>
         </div>
 
-        <!-- STAGE 2: CAKE -->
-        <div class="cake-screen" id="cake-ui">
-            <h1 style="color:white; font-size: 1.8rem;">Threat Eliminated!</h1>
-            <p style="margin-top:10px;">Make a wish and<br><strong>tap the cake</strong>.</p>
-            <div class="cake-container" onclick="blowCandles()">🎂</div>
-        </div>
+        <div id="dialogue-wrapper">
+            <div id="dialogue-box">
+                <span id="message-text"></span>
+                
+                <!-- Dynamic Interactive Container -->
+                <div id="interactive-container">
+                    
+                    <!-- Feature: Love/Miss You Slider -->
+                    <div id="slider-wrapper">
+                        <input type="range" id="miss-slider" min="0" max="100" value="0">
+                        <div id="slider-value">0%</div>
+                    </div>
 
-        <!-- STAGE 3: LETTER -->
-        <div class="final-letter" id="letter-ui">
-            <div class="photo-frame"></div>
-            <h1 style="font-family:'Orbitron'; color:var(--zenitsu-gold); font-size: 2rem;">Happy 21st!</h1>
-            
-            <div class="letter-content">
-                <p><strong>Dearest Guddu,</strong></p>
-                <p>Happy 21st Birthday!</p>
-                <p>Just like Zenitsu protects Nezuko, I'll always have your back.</p>
-                <p>May this year bring you power, happiness, and everything you wished for!</p>
-                <p style="margin-top: 15px;"><strong>Love, Yasar</strong></p>
+                    <!-- Feature: Promises Checklist -->
+                    <div id="promises-wrapper">
+                        <label class="promise-item"><input type="checkbox" class="promise-cb"> I accept your promise to stop being stubborn.</label>
+                        <label class="promise-item"><input type="checkbox" class="promise-cb"> I accept your promise to always call me.</label>
+                        <label class="promise-item"><input type="checkbox" class="promise-cb"> I accept your promise to treat me like a priority.</label>
+                    </div>
+
+                </div>
+
+                <div id="progress-dots"></div>
             </div>
-            
-            <button style="margin-top:20px; padding:12px 30px; background:var(--zenitsu-gold); border:none; border-radius:30px; font-weight:bold; cursor:pointer; font-size: 1.1rem; box-shadow: 0 0 10px var(--zenitsu-gold);" onclick="loveSpray()">
-                Send Love 💖
-            </button>
+        </div>
+
+        <!-- End Screen Gifts -->
+        <div id="end-presents">
+            <div id="polaroid">
+                <div class="polaroid-img">👩‍❤️‍👨</div>
+                <div class="polaroid-text">Our next memory...</div>
+            </div>
+            <div id="coupon">
+                🎟️ COUPON: One Make-Up Date (My Treat!)
+            </div>
+        </div>
+
+        <div class="btn-container" id="btn-wrap">
+            <button id="next-btn">Next ➔</button>
+            <button id="forgive-btn">Yes, I forgive you ❤️</button>
+            <button id="runaway-btn">No, I'm still mad 😤</button>
         </div>
     </div>
 
     <script>
-        // --- AUDIO SYSTEM (No external files needed) ---
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        
-        function playSound(type) {
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            const osc = audioCtx.createOscillator();
-            const gainNode = audioCtx.createGain();
-            osc.connect(gainNode);
-            gainNode.connect(audioCtx.destination);
+        const story = [
+            { text: "Hey... I am so sorry about everything that happened today.", emotion: "sad", bg: "#f0f4f8", weather: "none" },
+            { text: "At breakfast, when we argued about the craft bazaar, I was being stubborn.", emotion: "sad", bg: "#e6e6fa", weather: "none" },
+            { text: "I fell asleep, woke up late, rushed to the bus, and panicked when you weren't there.", emotion: "crying", bg: "#90aecb", weather: "rain" },
+            
+            // NEW INTERACTION: Wipe Tears
+            { text: "I thought you were on another bus. I didn't mean to leave without you. <br><br><i>(Please tap my face to wipe my tears 🥺)</i>", emotion: "crying", bg: "#7c9ebf", weather: "rain", action: "wipe" },
+            
+            { text: "My biggest mistake was not calling you immediately. I am so sorry I made you feel left behind.", emotion: "pleading", bg: "#dcd0ff", weather: "none" },
+            
+            // NEW INTERACTION: Slider
+            { text: "How much do I regret it and miss you right now? Drag the slider to find out...", emotion: "sad", bg: "#ffd1dc", weather: "none", action: "slider" },
+            
+            { text: "Because you are so special to me, I wrote down these promises. Please check them off to accept them...", emotion: "love", bg: "#ffe6ea", weather: "sparkle", action: "promises" },
+            { text: "I just want to enjoy my life with you, make memories, and be happy together. Can you forgive me? ❤️", emotion: "happy", bg: "#ff99b3", weather: "sparkle" }
+        ];
 
-            if (type === 'hit') {
-                // High pitch zap
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.1);
-            } else if (type === 'win') {
-                // Victory chord
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.3);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 1);
+        let currentIndex = 0;
+        let isTyping = false;
+        let typingTimeout;
+        let waitingForAction = false;
+        
+        const introScreen = document.getElementById('intro-screen');
+        const mainContent = document.getElementById('main-content');
+        const blob = document.getElementById('blob');
+        const messageText = document.getElementById('message-text');
+        const nextBtn = document.getElementById('next-btn');
+        const forgiveBtn = document.getElementById('forgive-btn');
+        const runawayBtn = document.getElementById('runaway-btn');
+        const body = document.body;
+        const weatherContainer = document.getElementById('weather-container');
+        const progressContainer = document.getElementById('progress-dots');
+        const interactiveContainer = document.getElementById('interactive-container');
+        
+        // Interactive Elements
+        const promisesWrapper = document.getElementById('promises-wrapper');
+        const checkboxes = document.querySelectorAll('.promise-cb');
+        const sliderWrapper = document.getElementById('slider-wrapper');
+        const missSlider = document.getElementById('miss-slider');
+        const sliderValue = document.getElementById('slider-value');
+        
+        const endPresents = document.getElementById('end-presents');
+        const bgMusic = document.getElementById('bg-music');
+        let weatherInterval;
+
+        // --- Floating Sweet Words ---
+        const sweetWords = ["Beautiful! 💕", "My Everything! ✨", "So Special! 🌸", "I Love You! 🥺", "My Girl! 🥰", "Gorgeous! 🦋", "My World! 🌍"];
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('#intro-screen') || e.target.closest('label') || e.target.closest('#character-container')) return;
+            
+            const word = document.createElement('div');
+            word.classList.add('floating-word'); word.textContent = sweetWords[Math.floor(Math.random() * sweetWords.length)];
+            word.style.left = e.pageX + 'px'; word.style.top = e.pageY + 'px';
+            document.body.appendChild(word); setTimeout(() => word.remove(), 2000);
+        });
+
+        // --- Blob Tap Logic (Includes wiping tears) ---
+        function handleBlobTap() {
+            blob.classList.add('spin');
+            setTimeout(() => { blob.classList.remove('spin'); }, 800);
+
+            // If we are on the wipe tears slide
+            if(story[currentIndex].action === 'wipe' && waitingForAction && !isTyping) {
+                blob.classList.add('wiped'); // Adds CSS to hide tears and show blush
+                waitingForAction = false;
+                nextBtn.disabled = false;
+                nextBtn.textContent = "Thank you 🥺 ➔";
+                
+                const wow = document.createElement('div');
+                wow.classList.add('floating-word'); wow.textContent = "Thank you! 💕";
+                wow.style.left = '50%'; wow.style.top = '30%'; document.body.appendChild(wow); setTimeout(() => wow.remove(), 2000);
             }
         }
 
-        // --- SAKURA ---
-        const sakuraContainer = document.getElementById('sakura-container');
-        function createSakura() {
-            const petal = document.createElement('div');
-            petal.classList.add('sakura');
-            petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = Math.random() * 3 + 2 + 's';
-            petal.style.width = Math.random() * 10 + 5 + 'px';
-            petal.style.height = petal.style.width;
-            sakuraContainer.appendChild(petal);
-            setTimeout(() => petal.remove(), 5000);
-        }
-        setInterval(createSakura, 300);
+        // --- Slider Logic ---
+        missSlider.addEventListener('input', (e) => {
+            if(story[currentIndex].action === 'slider' && waitingForAction) {
+                let val = e.target.value;
+                sliderValue.textContent = val + '%';
+                
+                if(val == 100) {
+                    sliderValue.textContent = "Infinity! ❤️";
+                    waitingForAction = false;
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "Next ➔";
+                    blob.className = 'blob love'; // Make him happy
+                    
+                    for(let i=0; i<5; i++) {
+                        const wow = document.createElement('div'); wow.classList.add('floating-word'); wow.textContent = "❤️";
+                        wow.style.left = (40 + Math.random()*20) + '%'; wow.style.top = (40 + Math.random()*20) + '%';
+                        document.body.appendChild(wow); setTimeout(() => wow.remove(), 2000);
+                    }
+                } else {
+                    nextBtn.disabled = true;
+                }
+            }
+        });
 
-        // --- GAME LOGIC ---
-        let kills = 0;
-        const TARGET = 21;
-        const zone = document.getElementById('zone');
-        const bar = document.getElementById('bar');
-        
-        function initializeGame() {
-            document.getElementById('start-screen').style.display = 'none';
-            playStartSound();
-            spawnDemon(); spawnDemon(); spawnDemon();
-        }
-
-        function playStartSound() {
-             if (audioCtx.state === 'suspended') audioCtx.resume();
-             // Simple "Start" swoop
-             const osc = audioCtx.createOscillator();
-             const gain = audioCtx.createGain();
-             osc.connect(gain); gain.connect(audioCtx.destination);
-             osc.frequency.setValueAtTime(200, audioCtx.currentTime);
-             osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.5);
-             gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-             gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5);
-             osc.start(); osc.stop(audioCtx.currentTime + 0.5);
-        }
-
-        function spawnDemon() {
-            if(kills >= TARGET) return;
-            const demon = document.createElement('div');
-            demon.classList.add('demon');
-            demon.innerHTML = '👹';
-            demon.style.left = Math.random() * (zone.clientWidth - 50) + 'px';
-            demon.style.top = Math.random() * (zone.clientHeight - 50) + 'px';
-            
-            demon.onclick = (e) => {
-                e.stopPropagation(); 
-                kills++;
-                playSound('hit');
-                updateProgress();
-                demon.remove();
-                confetti({
-                    particleCount: 5, spread: 20,
-                    origin: { x: e.clientX/window.innerWidth, y: e.clientY/window.innerHeight },
-                    colors: ['#FFD700', '#fff'], disableForReducedMotion: true
-                });
-                if(kills === TARGET) endGame();
-                else { spawnDemon(); if(Math.random() > 0.5) spawnDemon(); }
-            };
-            zone.appendChild(demon);
-        }
-
-        function updateProgress() {
-            bar.style.width = (kills / TARGET) * 100 + '%';
-        }
-
-        function endGame() {
-            playSound('win');
-            document.getElementById('game-stage').style.display = 'none';
-            document.getElementById('cake-ui').style.display = 'flex';
-            confetti({ particleCount: 50, origin: { y: 0.7 } });
-        }
-
-        // --- CAKE & LETTER ---
-        function blowCandles() {
-            playSound('win');
-            confetti({ particleCount: 30, colors: ['#999', '#ddd'], origin: { y: 0.5 } });
-            setTimeout(() => {
-                document.getElementById('cake-ui').style.display = 'none';
-                document.getElementById('letter-ui').style.display = 'flex';
-                loveSpray();
-            }, 1000);
-        }
-
-        function loveSpray() {
-            playSound('win');
-            confetti({
-                particleCount: 60, spread: 100, origin: { y: 0.6 },
-                colors: ['#FFD700', '#ffb7c5', '#ff0000'],
-                shapes: ['heart']
+        // --- Checkboxes Logic ---
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const allChecked = Array.from(checkboxes).every(c => c.checked);
+                if (allChecked && !isTyping && story[currentIndex].action === 'promises') {
+                    waitingForAction = false;
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "Next ➔";
+                } else if (story[currentIndex].action === 'promises') {
+                    nextBtn.disabled = true;
+                    nextBtn.textContent = "Accept all promises to continue";
+                }
             });
+        });
+
+        // Setup dots
+        story.forEach((_, index) => {
+            const dot = document.createElement('div'); dot.classList.add('dot');
+            if(index === 0) dot.classList.add('active'); progressContainer.appendChild(dot);
+        });
+
+        function updateDots() { document.querySelectorAll('.dot').forEach((dot, index) => { dot.classList.toggle('active', index === currentIndex); }); }
+
+        function startStory() {
+            bgMusic.volume = 0.3; bgMusic.play().catch(e => console.log("Audio autoplay blocked."));
+            introScreen.style.opacity = '0'; introScreen.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                introScreen.style.display = 'none'; mainContent.style.display = 'flex'; updateSlide();
+                
+                setTimeout(() => {
+                    const hint = document.createElement('div'); hint.classList.add('floating-word'); hint.textContent = "Tap the background! ✨";
+                    hint.style.left = '50%'; hint.style.top = '20%'; document.body.appendChild(hint); setTimeout(() => hint.remove(), 2500);
+                }, 1000);
+            }, 800);
         }
+
+        function setWeather(type) {
+            weatherContainer.innerHTML = ''; clearInterval(weatherInterval);
+            if (type === 'rain') {
+                weatherInterval = setInterval(() => {
+                    const drop = document.createElement('div'); drop.classList.add('drop');
+                    drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+                    weatherContainer.appendChild(drop); setTimeout(() => drop.remove(), 1000);
+                }, 50);
+            } else if (type === 'sparkle') {
+                weatherInterval = setInterval(() => {
+                    const sparkle = document.createElement('div'); sparkle.classList.add('sparkle'); sparkle.innerHTML = '✨';
+                    sparkle.style.left = Math.random() * 100 + 'vw'; sparkle.style.top = Math.random() * 100 + 'vh';
+                    weatherContainer.appendChild(sparkle); setTimeout(() => sparkle.remove(), 2000);
+                }, 300);
+            }
+        }
+
+        function typeWriter(text, i) {
+            if (i < text.length) {
+                // Allows HTML tags like <br> and <i> to render instantly
+                if(text.charAt(i) === '<') {
+                    let tag = '';
+                    while(text.charAt(i) !== '>' && i < text.length) { tag += text.charAt(i); i++; }
+                    tag += '>';
+                    messageText.innerHTML = messageText.innerHTML.replace('<span class="typing-cursor"></span>', '') + tag + '<span class="typing-cursor"></span>';
+                    typeWriter(text, i + 1);
+                    return;
+                }
+
+                messageText.innerHTML = messageText.innerHTML.replace('<span class="typing-cursor"></span>', '') + text.charAt(i) + '<span class="typing-cursor"></span>';
+                typingTimeout = setTimeout(() => typeWriter(text, i + 1), 35); 
+            } else {
+                messageText.innerHTML = text; 
+                isTyping = false;
+                handleSlideAction();
+            }
+        }
+
+        // Handles what happens after text finishes typing
+        function handleSlideAction() {
+            const action = story[currentIndex].action;
+            
+            if (action === 'wipe') {
+                waitingForAction = true;
+                nextBtn.disabled = true;
+                nextBtn.textContent = "Tap my face to wipe tears...";
+            } 
+            else if (action === 'slider') {
+                waitingForAction = true;
+                interactiveContainer.style.display = 'block';
+                sliderWrapper.style.display = 'flex';
+                missSlider.value = 0;
+                sliderValue.textContent = '0%';
+                nextBtn.disabled = true;
+                nextBtn.textContent = "Drag the slider...";
+            } 
+            else if (action === 'promises') {
+                waitingForAction = true;
+                interactiveContainer.style.display = 'block';
+                promisesWrapper.style.display = 'block';
+                nextBtn.disabled = true;
+                nextBtn.textContent = "Accept promises to continue";
+            } 
+            else {
+                nextBtn.disabled = false; 
+                nextBtn.textContent = "Next ➔";
+            }
+        }
+
+        function updateSlide() {
+            const current = story[currentIndex];
+            
+            clearTimeout(typingTimeout);
+            isTyping = true;
+            waitingForAction = false;
+            nextBtn.disabled = true; 
+            
+            // Reset special states
+            interactiveContainer.style.display = 'none';
+            promisesWrapper.style.display = 'none'; 
+            sliderWrapper.style.display = 'none';
+            blob.classList.remove('wiped');
+            
+            messageText.innerHTML = '<span class="typing-cursor"></span>';
+            setTimeout(() => typeWriter(current.text, 0), 200);
+
+            blob.className = 'blob ' + current.emotion;
+            body.style.backgroundColor = current.bg;
+            setWeather(current.weather);
+            updateDots();
+
+            if (currentIndex === story.length - 1) {
+                nextBtn.style.display = 'none';
+                setTimeout(() => {
+                    forgiveBtn.style.display = 'block';
+                    runawayBtn.style.display = 'block';
+                }, current.text.length * 35 + 500);
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (isTyping || waitingForAction) return; 
+            if (currentIndex < story.length - 1) {
+                currentIndex++;
+                updateSlide();
+            }
+        });
+
+        runawayBtn.addEventListener('mouseover', moveButton);
+        runawayBtn.addEventListener('touchstart', moveButton);
+
+        function moveButton(e) {
+            e.preventDefault();
+            const randomX = Math.floor(Math.random() * (window.innerWidth - runawayBtn.clientWidth));
+            const randomY = Math.floor(Math.random() * (window.innerHeight - runawayBtn.clientHeight - 100));
+            runawayBtn.style.position = 'fixed'; runawayBtn.style.left = randomX + 'px'; runawayBtn.style.top = randomY + 'px';
+        }
+
+        forgiveBtn.addEventListener('click', () => {
+            setWeather('none');
+            messageText.innerHTML = "Thank you so much! I love you! 💕 Let's make memories!";
+            blob.className = 'blob love';
+            forgiveBtn.style.display = 'none'; runawayBtn.style.display = 'none';
+            interactiveContainer.style.display = 'none';
+            document.getElementById('dialogue-wrapper').style.display = 'none'; 
+            body.style.backgroundColor = '#ffe6e6';
+            
+            // Show End Presents (Polaroid & Coupon)
+            endPresents.style.display = 'flex';
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div'); heart.classList.add('heart-fly');
+                    heart.innerHTML = ['❤️', '💖', '💕', '🥰'][Math.floor(Math.random() * 4)];
+                    heart.style.left = Math.random() * 100 + 'vw'; heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                    document.body.appendChild(heart); setTimeout(() => heart.remove(), 5000);
+                }, i * 100);
+            }
+        });
     </script>
 </body>
 </html>
-
