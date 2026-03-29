@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Special Girl... 💌</title>
+    <title>Pack your bags... ✈️</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #ffcccc;
+            --bg-color: #e6f7ff;
             --blob-color: #ffffff;
             --text-color: #555555;
         }
@@ -15,31 +15,24 @@
         body {
             margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
             min-height: 100vh; background-color: var(--bg-color); font-family: 'Nunito', sans-serif;
-            text-align: center; color: var(--text-color); transition: background-color 1s ease;
-            overflow: hidden; position: relative;
-            user-select: none;
+            text-align: center; color: var(--text-color); transition: background-color 1.5s ease;
+            overflow: hidden; position: relative; user-select: none;
         }
 
-        /* --- Envelope Intro Screen --- */
+        /* --- Suitcase Intro Screen --- */
         #intro-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffb3c6;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffdab9;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 100; transition: opacity 1s ease, transform 1s ease;
         }
 
-        .envelope {
-            width: 150px; height: 100px; background-color: #fff; position: relative; border-radius: 5px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15); cursor: pointer; animation: bounce 2s infinite ease-in-out;
-            display: flex; align-items: center; justify-content: center; font-size: 40px;
-        }
-
-        .envelope::before {
-            content: ''; position: absolute; top: 0; left: 0;
-            border-top: 50px solid #f2f2f2; border-right: 75px solid transparent; border-left: 75px solid transparent; z-index: 2;
+        .suitcase-icon {
+            font-size: 80px; cursor: pointer; animation: bounce 1.5s infinite ease-in-out;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
         }
 
         .envelope-text {
-            margin-top: 30px; font-family: 'Pacifico', cursive; font-size: 24px; color: #d6336c;
+            margin-top: 20px; font-family: 'Pacifico', cursive; font-size: 26px; color: #d84315;
             animation: pulse 1.5s infinite alternate;
         }
 
@@ -58,12 +51,9 @@
             animation: float 3s ease-in-out infinite; transition: all 0.5s ease;
         }
 
-        .spin { animation: spinAround 0.8s ease-in-out !important; }
-
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.05); opacity: 1; } }
-        @keyframes spinAround { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1); } }
 
         /* Facial Features */
         .face { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; transition: all 0.3s ease; }
@@ -72,147 +62,121 @@
         .mouth { position: absolute; width: 20px; height: 10px; border-bottom: 3px solid #444; border-radius: 50%; top: 60px; left: 50%; transform: translateX(-50%); transition: all 0.3s ease; }
         .blush { position: absolute; width: 25px; height: 12px; background-color: #ffb3b3; border-radius: 50%; top: 55px; opacity: 0; transition: opacity 0.3s ease; }
         .blush.left { left: 25px; } .blush.right { right: 25px; }
-        .tear { position: absolute; width: 8px; height: 12px; background-color: #80c1ff; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; top: 55px; opacity: 0; }
-        .tear.left { left: 48px; } .tear.right { right: 48px; }
 
         /* Emotions */
-        .sad .mouth { border-bottom: none; border-top: 3px solid #444; top: 65px; height: 12px; }
-        .crying .eye { height: 8px; border-radius: 10px; top: 43px; }
-        .crying .mouth { border-bottom: none; border-top: 3px solid #444; top: 65px; width: 15px;}
-        .crying .tear { opacity: 1; animation: cry 1s infinite linear; }
-        @keyframes cry { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(20px) scale(0.5); opacity: 0; } }
-        
-        /* Wiped tears state */
-        .wiped .tear { display: none !important; }
-        .wiped .blush { opacity: 0.8 !important; }
-
+        .curious .eye { width: 16px; height: 16px; top: 38px; }
+        .curious .mouth { width: 12px; height: 12px; border: 3px solid #444; border-radius: 50%; top: 62px; background: transparent;}
+        .excited .eye { height: 4px; border-radius: 10px; top: 45px; }
+        .excited .mouth { width: 25px; height: 15px; border-bottom: 4px solid #444; top: 55px; }
+        .excited .blush { opacity: 1; }
         .pleading .eye { width: 18px; height: 18px; top: 38px; }
         .pleading .eye::after { content: ''; position: absolute; width: 6px; height: 6px; background: white; border-radius: 50%; top: 2px; left: 2px; }
         .pleading .mouth { width: 10px; height: 10px; border: 3px solid #444; border-radius: 50%; top: 62px; background: #ff9999;}
         .pleading .blush { opacity: 0.6; }
         .love .eye { background-color: transparent; }
-        .love .eye::before { content: '❤️'; font-size: 22px; position: absolute; top: -12px; left: -4px; animation: pulse 1s infinite alternate; }
+        .love .eye::before { content: '❤️'; font-size: 24px; position: absolute; top: -14px; left: -5px; animation: pulse 1s infinite alternate; }
         .love .mouth { width: 20px; height: 15px; border-bottom: 3px solid #444; top: 55px; }
         .love .blush { opacity: 0.8; }
-        .happy .eye { height: 4px; border-radius: 10px; top: 45px; }
-        .happy .mouth { width: 25px; height: 12px; border-bottom: 4px solid #444; top: 55px; }
-        .happy .blush { opacity: 1; }
+
+        /* Sunglasses for the cool travel blob! */
+        .cool .eye { display: none; }
+        .cool .mouth { width: 20px; height: 10px; border-bottom: 3px solid #444; top: 60px; }
+        .cool::after { content: '🕶️'; font-size: 55px; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); z-index: 5; }
 
         /* --- Dialogue Box --- */
         #dialogue-wrapper { position: relative; margin-bottom: 30px; z-index: 20; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; }
         #dialogue-box {
-            background: white; padding: 25px 30px; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 85%;
-            font-size: 20px; position: relative; line-height: 1.6; min-height: 110px;
+            background: white; padding: 25px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 85%;
+            font-size: 20px; position: relative; line-height: 1.6; min-height: 100px;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
         }
-        #dialogue-box::after {
-            content: ''; position: absolute; top: -15px; left: 50%; margin-left: -15px;
-            border-width: 0 15px 15px 15px; border-style: solid; border-color: transparent transparent white transparent;
-        }
+        #dialogue-box::after { content: ''; position: absolute; top: -15px; left: 50%; margin-left: -15px; border-width: 0 15px 15px 15px; border-style: solid; border-color: transparent transparent white transparent; }
         
         #message-text { display: inline-block; min-height: 80px; width: 100%; }
         .typing-cursor { border-right: 2px solid #555; animation: blink 0.7s infinite; }
         @keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: #555; } }
 
-        /* --- Interactive Elements (Slider & Promises) --- */
-        #interactive-container { width: 100%; margin-top: 15px; display: none; }
+        /* --- Interactive Mini Games --- */
+        #interactive-container { width: 100%; display: none; margin-top: 15px; }
         
-        /* Slider */
-        #slider-wrapper { display: none; width: 100%; flex-direction: column; align-items: center; background: #fff0f5; padding: 15px; border-radius: 15px; border: 2px dashed #ffb3c6; box-sizing: border-box;}
-        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; margin: 10px 0; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 25px; width: 25px; border-radius: 50%; background: #ff4d88; cursor: pointer; box-shadow: 0 2px 6px rgba(255,77,136,0.4); margin-top: -10px; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #ffcccc; border-radius: 5px; }
-        #slider-value { font-size: 24px; font-weight: bold; color: #ff4d88; font-family: 'Pacifico', cursive; margin-top: 5px;}
+        /* Game 1: Packing */
+        #pack-game { display: none; flex-wrap: wrap; justify-content: center; gap: 20px; background: #fff0f5; padding: 15px; border-radius: 15px; border: 2px dashed #ffb3c6; }
+        .pack-item { font-size: 45px; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+        .pack-item:hover { transform: scale(1.1) rotate(5deg); }
+        .pack-item.packed { transform: scale(0) rotate(-45deg); opacity: 0; pointer-events: none; }
 
-        /* Promises */
-        #promises-wrapper { display: none; width: 100%; background: #fff0f5; padding: 15px; border-radius: 15px; box-sizing: border-box; text-align: left; border: 2px dashed #ffb3c6; }
-        .promise-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 16px; cursor: pointer; transition: transform 0.2s ease; }
-        .promise-item:hover { transform: translateX(5px); }
-        .promise-item input[type="checkbox"] { width: 22px; height: 22px; accent-color: #ff4d88; cursor: pointer; flex-shrink: 0; }
+        /* Game 2: Travel Choice */
+        #travel-choice { display: none; flex-wrap: wrap; justify-content: center; gap: 10px; background: #e6f7ff; padding: 15px; border-radius: 15px; border: 2px dashed #80c1ff; }
+        .travel-btn { background: white; color: #555; border: 2px solid #80c1ff; padding: 10px 20px; font-size: 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .travel-btn:hover { background: #80c1ff; color: white; transform: translateY(-2px); }
+
+        /* --- Buttons --- */
+        .btn-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; min-height: 60px; position: relative; width: 100%; z-index: 20; }
+        .main-btn { background-color: #ff8c42; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4); font-family: 'Nunito', sans-serif; }
+        .main-btn:hover { background-color: #e87024; transform: translateY(-2px); }
+        .main-btn:disabled { background-color: #ccc !important; cursor: not-allowed; box-shadow: none; transform: none; }
+        
+        #yes-btn { display: none; background-color: #4CAF50; box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4); }
+        #yes-btn:hover { background-color: #45a049; }
+        #no-btn { display: none; background-color: #f44336; }
+
+        /* --- VIP Ticket (End Screen) --- */
+        #ticket-container {
+            display: none; width: 90%; max-width: 400px; background: white;
+            border-radius: 15px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            margin-top: 10px; animation: dropInTicket 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative; z-index: 10; flex-direction: row; border: 2px solid #ffccbc;
+        }
+        .ticket-left { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); padding: 20px; color: white; flex: 2; text-align: left; border-right: 3px dashed white; position: relative; }
+        .ticket-right { background: #fff; padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #ff8c42; }
+        .ticket-title { font-family: 'Pacifico', cursive; font-size: 24px; margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
+        .ticket-detail { margin: 5px 0; font-size: 16px; font-weight: bold; }
+        .ticket-small { font-size: 12px; opacity: 0.9; margin: 0; }
+        .barcode { font-family: 'Courier New', Courier, monospace; font-size: 20px; letter-spacing: 2px; margin-top: 10px; font-weight: bold; color: #444; transform: rotate(90deg); }
+        @keyframes dropInTicket { 0% { opacity: 0; transform: translateY(-50px) scale(0.9) rotate(-5deg); } 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
+
+        /* --- Particle Effects --- */
+        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; z-index: 1000; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+        
+        .floating-word {
+            position: absolute; font-family: 'Pacifico', cursive; color: #ff8c42;
+            font-size: 22px; pointer-events: none; z-index: 100; font-weight: bold;
+            text-shadow: 0 2px 5px rgba(255,255,255,0.8); animation: floatWordAnim 2s ease-out forwards;
+        }
+        @keyframes floatWordAnim { 0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } 20% { opacity: 1; transform: translate(-50%, -30px) scale(1.2); } 100% { transform: translate(-50%, -100px) scale(1); opacity: 0; } }
 
         /* Progress Dots */
         #progress-dots { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
         .dot { width: 8px; height: 8px; background-color: #ddd; border-radius: 50%; transition: all 0.3s ease; }
-        .dot.active { background-color: #ff4d88; transform: scale(1.3); }
-
-        /* --- Buttons --- */
-        .btn-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; min-height: 60px; position: relative; width: 100%; z-index: 20; }
-        button { background-color: #ff80aa; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 128, 170, 0.4); font-family: 'Nunito', sans-serif; }
-        button:hover { background-color: #ff4d88; transform: translateY(-2px); }
-        button:disabled { background-color: #ccc !important; cursor: not-allowed; box-shadow: none; transform: none; }
-        
-        #forgive-btn { display: none; background-color: #ff4d4d; }
-        #runaway-btn { display: none; background-color: #888; color: white; }
-
-        /* --- End Screen (Polaroid & Coupon) --- */
-        #end-presents { display: none; flex-direction: column; align-items: center; gap: 20px; z-index: 10; margin-top: 20px; }
-        
-        #polaroid {
-            width: 200px; height: 240px; background: white; padding: 10px 10px 40px 10px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); transform: rotate(-5deg);
-            animation: dropIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        }
-        .polaroid-img { width: 100%; height: 100%; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; border: 1px dashed #ccc; font-size: 40px;}
-        .polaroid-text { position: absolute; bottom: 10px; left: 0; width: 100%; text-align: center; font-family: 'Pacifico', cursive; font-size: 16px; color: #555; }
-
-        #coupon {
-            background: #ffecb3; border: 2px dashed #ffb300; padding: 15px 25px; border-radius: 10px;
-            color: #d84315; font-weight: bold; font-size: 18px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transform: rotate(3deg); animation: dropIn 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            display: flex; align-items: center; gap: 10px;
-        }
-        
-        @keyframes dropIn { 0% { opacity: 0; transform: translateY(-50px) rotate(0); } 100% { opacity: 1; } }
-
-        /* --- Particle Effects --- */
-        #weather-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
-        .drop { position: absolute; background: rgba(255, 255, 255, 0.6); width: 2px; height: 15px; animation: rain linear infinite; }
-        @keyframes rain { 0% { transform: translateY(-100px); opacity: 0; } 50% { opacity: 1; } 100% { transform: translateY(100vh); opacity: 0; } }
-        .sparkle { position: absolute; color: white; font-size: 20px; animation: twinkle 2s infinite ease-in-out; }
-        @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(0.5) rotate(0deg); } 50% { opacity: 1; transform: scale(1.2) rotate(180deg); } }
-        .heart-fly { position: absolute; color: #ff4d4d; font-size: 30px; animation: floatUp 4s linear forwards; }
-        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0.5); opacity: 1; } 100% { transform: translateY(-20vh) scale(1.5); opacity: 0; } }
-
-        /* Floating Sweet Words */
-        .floating-word {
-            position: absolute; font-family: 'Pacifico', cursive; color: #ff3377;
-            font-size: 22px; pointer-events: none; z-index: 100; font-weight: bold;
-            text-shadow: 0 2px 5px rgba(255,255,255,0.8);
-            animation: floatWordAnim 2s ease-out forwards;
-        }
-        @keyframes floatWordAnim { 0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } 20% { opacity: 1; transform: translate(-50%, -30px) scale(1.2); } 100% { transform: translate(-50%, -100px) scale(1); opacity: 0; } }
+        .dot.active { background-color: #ff8c42; transform: scale(1.3); }
 
         @media (max-width: 500px) {
-            #dialogue-box { font-size: 17px; padding: 20px; width: 85%; }
-            button { padding: 12px 25px; font-size: 16px; }
-            .promise-item { font-size: 14px; }
-            #coupon { font-size: 15px; padding: 10px 15px; }
+            #dialogue-box { font-size: 18px; padding: 20px; width: 85%; }
+            .main-btn { padding: 12px 25px; font-size: 16px; }
+            .ticket-left { padding: 15px; } .ticket-title { font-size: 20px; } .ticket-detail { font-size: 14px; }
+            .pack-item { font-size: 35px; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Acoustic Travel Music -->
     <audio id="bg-music" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-sleepy-cat-135.mp3" type="audio/mpeg">
+        <source src="https://assets.mixkit.co/music/preview/mixkit-sun-and-his-daughter-580.mp3" type="audio/mpeg">
     </audio>
 
     <div id="intro-screen">
-        <div class="envelope" onclick="startStory()">💌</div>
-        <div class="envelope-text">Tap to open...</div>
+        <div class="suitcase-icon" onclick="startStory()">🧳</div>
+        <div class="envelope-text">Tap to unpack...</div>
     </div>
 
-    <div id="weather-container"></div>
-
     <div id="main-content">
-        <!-- The Blob Character -->
-        <div id="character-container" onclick="handleBlobTap()">
-            <div id="blob" class="blob sad">
+        <div id="character-container">
+            <div id="blob" class="blob curious">
                 <div class="face">
                     <div class="blush left"></div>
                     <div class="blush right"></div>
-                    <div class="tear left"></div>
-                    <div class="tear right"></div>
                     <div class="eye left"></div>
                     <div class="eye right"></div>
                     <div class="mouth"></div>
@@ -224,20 +188,22 @@
             <div id="dialogue-box">
                 <span id="message-text"></span>
                 
-                <!-- Dynamic Interactive Container -->
+                <!-- Interactive Games Container -->
                 <div id="interactive-container">
                     
-                    <!-- Feature: Love/Miss You Slider -->
-                    <div id="slider-wrapper">
-                        <input type="range" id="miss-slider" min="0" max="100" value="0">
-                        <div id="slider-value">0%</div>
+                    <!-- Game 1: Packing -->
+                    <div id="pack-game">
+                        <span class="pack-item" onclick="packItem(this)">📸</span>
+                        <span class="pack-item" onclick="packItem(this)">🕶️</span>
+                        <span class="pack-item" onclick="packItem(this)">🧴</span>
+                        <span class="pack-item" onclick="packItem(this)">👗</span>
                     </div>
 
-                    <!-- Feature: Promises Checklist -->
-                    <div id="promises-wrapper">
-                        <label class="promise-item"><input type="checkbox" class="promise-cb"> I accept your promise to stop being stubborn.</label>
-                        <label class="promise-item"><input type="checkbox" class="promise-cb"> I accept your promise to always call me.</label>
-                        <label class="promise-item"><input type="checkbox" class="promise-cb"> I accept your promise to treat me like a priority.</label>
+                    <!-- Game 2: Travel Selector -->
+                    <div id="travel-choice">
+                        <button class="travel-btn" onclick="chooseTravel('Flight ✈️')">Flight ✈️</button>
+                        <button class="travel-btn" onclick="chooseTravel('Train 🚂')">Train 🚂</button>
+                        <button class="travel-btn" onclick="chooseTravel('Road Trip 🚗')">Road Trip 🚗</button>
                     </div>
 
                 </div>
@@ -246,40 +212,44 @@
             </div>
         </div>
 
-        <!-- End Screen Gifts -->
-        <div id="end-presents">
-            <div id="polaroid">
-                <div class="polaroid-img">👩‍❤️‍👨</div>
-                <div class="polaroid-text">Our next memory...</div>
+        <!-- The Final VIP Ticket -->
+        <div id="ticket-container">
+            <div class="ticket-left">
+                <h3 class="ticket-title">Getaway Pass ✨</h3>
+                <p class="ticket-small">PASSENGER:</p>
+                <p class="ticket-detail">The Most Special Girl 💕</p>
+                <p class="ticket-small">DESTINATION:</p>
+                <p class="ticket-detail">Jaipur (The Pink City) 🏰</p>
             </div>
-            <div id="coupon">
-                🎟️ COUPON: One Make-Up Date (My Treat!)
+            <div class="ticket-right">
+                <p class="ticket-small">ONE WAY TO</p>
+                <h3 style="margin: 5px 0;">Memories</h3>
+                <div class="barcode">|||||||||</div>
             </div>
         </div>
 
         <div class="btn-container" id="btn-wrap">
-            <button id="next-btn">Next ➔</button>
-            <button id="forgive-btn">Yes, I forgive you ❤️</button>
-            <button id="runaway-btn">No, I'm still mad 😤</button>
+            <button class="main-btn" id="next-btn">Next ➔</button>
+            <button class="main-btn" id="yes-btn">Yes! Let's go! ✈️</button>
+            <button class="main-btn" id="no-btn">No way 🙅‍♀️</button>
         </div>
     </div>
 
     <script>
         const story = [
-            { text: "Hey... I am so sorry about everything that happened today.", emotion: "sad", bg: "#f0f4f8", weather: "none" },
-            { text: "At breakfast, when we argued about the craft bazaar, I was being stubborn.", emotion: "sad", bg: "#e6e6fa", weather: "none" },
-            { text: "I fell asleep, woke up late, rushed to the bus, and panicked when you weren't there.", emotion: "crying", bg: "#90aecb", weather: "rain" },
+            { text: "Hey! So... since we have a long week off from college...", emotion: "curious", bg: "#e6f7ff" },
+            { text: "I was thinking... we need a proper getaway. Just the two of us.", emotion: "excited", bg: "#e6ffe6" },
+            { text: "To leave all the stress behind, relax, and finally make those beautiful memories.", emotion: "love", bg: "#fff0f5" },
+            { text: "I've chosen the perfect destination... The Pink City, Jaipur! 🏰🐪🌸", emotion: "cool", bg: "#ffebcc" },
             
-            // NEW INTERACTION: Wipe Tears
-            { text: "I thought you were on another bus. I didn't mean to leave without you. <br><br><i>(Please tap my face to wipe my tears 🥺)</i>", emotion: "crying", bg: "#7c9ebf", weather: "rain", action: "wipe" },
+            // GAME 1: PACKING
+            { text: "But wait! I can't do this alone. Tap the items below to help me pack the suitcase! 🧳", emotion: "curious", bg: "#ffe4e1", action: "pack" },
             
-            { text: "My biggest mistake was not calling you immediately. I am so sorry I made you feel left behind.", emotion: "pleading", bg: "#dcd0ff", weather: "none" },
+            // GAME 2: TRAVEL CHOICE
+            { text: "Awesome! Everything is packed. Now, how do you want to travel there?", emotion: "excited", bg: "#e0ffff", action: "travel" },
             
-            // NEW INTERACTION: Slider
-            { text: "How much do I regret it and miss you right now? Drag the slider to find out...", emotion: "sad", bg: "#ffd1dc", weather: "none", action: "slider" },
-            
-            { text: "Because you are so special to me, I wrote down these promises. Please check them off to accept them...", emotion: "love", bg: "#ffe6ea", weather: "sparkle", action: "promises" },
-            { text: "I just want to enjoy my life with you, make memories, and be happy together. Can you forgive me? ❤️", emotion: "happy", bg: "#ff99b3", weather: "sparkle" }
+            { text: "Perfect! Everything is set. Now for the most important question...", emotion: "pleading", bg: "#ffccbc" },
+            { text: "Will you go on this trip with me? 🥺❤️", emotion: "love", bg: "#ffb6c1", isQuestion: true }
         ];
 
         let currentIndex = 0;
@@ -292,91 +262,56 @@
         const blob = document.getElementById('blob');
         const messageText = document.getElementById('message-text');
         const nextBtn = document.getElementById('next-btn');
-        const forgiveBtn = document.getElementById('forgive-btn');
-        const runawayBtn = document.getElementById('runaway-btn');
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
         const body = document.body;
-        const weatherContainer = document.getElementById('weather-container');
         const progressContainer = document.getElementById('progress-dots');
         const interactiveContainer = document.getElementById('interactive-container');
-        
-        // Interactive Elements
-        const promisesWrapper = document.getElementById('promises-wrapper');
-        const checkboxes = document.querySelectorAll('.promise-cb');
-        const sliderWrapper = document.getElementById('slider-wrapper');
-        const missSlider = document.getElementById('miss-slider');
-        const sliderValue = document.getElementById('slider-value');
-        
-        const endPresents = document.getElementById('end-presents');
+        const packGame = document.getElementById('pack-game');
+        const travelChoice = document.getElementById('travel-choice');
+        const ticketContainer = document.getElementById('ticket-container');
         const bgMusic = document.getElementById('bg-music');
-        let weatherInterval;
 
-        // --- Floating Sweet Words ---
-        const sweetWords = ["Beautiful! 💕", "My Everything! ✨", "So Special! 🌸", "I Love You! 🥺", "My Girl! 🥰", "Gorgeous! 🦋", "My World! 🌍"];
+        // --- Floating Words on Tap ---
+        const sweetWords = ["Jaipur! 🏰", "Vacation! ✈️", "Memories! 📸", "So Special! 🌸", "Road Trip! 🚗", "My Girl! 🥰"];
         document.addEventListener('click', (e) => {
-            if(e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT' || e.target.closest('#intro-screen') || e.target.closest('label') || e.target.closest('#character-container')) return;
-            
+            if(e.target.tagName === 'BUTTON' || e.target.classList.contains('pack-item') || e.target.closest('#intro-screen')) return;
             const word = document.createElement('div');
             word.classList.add('floating-word'); word.textContent = sweetWords[Math.floor(Math.random() * sweetWords.length)];
             word.style.left = e.pageX + 'px'; word.style.top = e.pageY + 'px';
             document.body.appendChild(word); setTimeout(() => word.remove(), 2000);
         });
 
-        // --- Blob Tap Logic (Includes wiping tears) ---
-        function handleBlobTap() {
-            blob.classList.add('spin');
-            setTimeout(() => { blob.classList.remove('spin'); }, 800);
+        // --- Mini Game 1: Packing Logic ---
+        let itemsPacked = 0;
+        function packItem(el) {
+            if(el.classList.contains('packed')) return;
+            el.classList.add('packed');
+            itemsPacked++;
+            
+            // Spawn a cute text when packed
+            const pop = document.createElement('div'); pop.classList.add('floating-word'); pop.textContent = "Packed! ✔️";
+            pop.style.left = '50%'; pop.style.top = '40%'; document.body.appendChild(pop); setTimeout(() => pop.remove(), 1000);
 
-            // If we are on the wipe tears slide
-            if(story[currentIndex].action === 'wipe' && waitingForAction && !isTyping) {
-                blob.classList.add('wiped'); // Adds CSS to hide tears and show blush
-                waitingForAction = false;
-                nextBtn.disabled = false;
-                nextBtn.textContent = "Thank you 🥺 ➔";
-                
-                const wow = document.createElement('div');
-                wow.classList.add('floating-word'); wow.textContent = "Thank you! 💕";
-                wow.style.left = '50%'; wow.style.top = '30%'; document.body.appendChild(wow); setTimeout(() => wow.remove(), 2000);
+            if(itemsPacked === 4) {
+                setTimeout(() => {
+                    waitingForAction = false;
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "All packed! Next ➔";
+                }, 500);
             }
         }
 
-        // --- Slider Logic ---
-        missSlider.addEventListener('input', (e) => {
-            if(story[currentIndex].action === 'slider' && waitingForAction) {
-                let val = e.target.value;
-                sliderValue.textContent = val + '%';
-                
-                if(val == 100) {
-                    sliderValue.textContent = "Infinity! ❤️";
-                    waitingForAction = false;
-                    nextBtn.disabled = false;
-                    nextBtn.textContent = "Next ➔";
-                    blob.className = 'blob love'; // Make him happy
-                    
-                    for(let i=0; i<5; i++) {
-                        const wow = document.createElement('div'); wow.classList.add('floating-word'); wow.textContent = "❤️";
-                        wow.style.left = (40 + Math.random()*20) + '%'; wow.style.top = (40 + Math.random()*20) + '%';
-                        document.body.appendChild(wow); setTimeout(() => wow.remove(), 2000);
-                    }
-                } else {
-                    nextBtn.disabled = true;
-                }
-            }
-        });
-
-        // --- Checkboxes Logic ---
-        checkboxes.forEach(cb => {
-            cb.addEventListener('change', () => {
-                const allChecked = Array.from(checkboxes).every(c => c.checked);
-                if (allChecked && !isTyping && story[currentIndex].action === 'promises') {
-                    waitingForAction = false;
-                    nextBtn.disabled = false;
-                    nextBtn.textContent = "Next ➔";
-                } else if (story[currentIndex].action === 'promises') {
-                    nextBtn.disabled = true;
-                    nextBtn.textContent = "Accept all promises to continue";
-                }
-            });
-        });
+        // --- Mini Game 2: Travel Logic ---
+        function chooseTravel(method) {
+            waitingForAction = false;
+            nextBtn.disabled = false;
+            nextBtn.textContent = "Next ➔";
+            
+            // Instantly update the text to react to her choice!
+            messageText.innerHTML = `Yay! A <b>${method}</b> sounds perfect for us. <br><br><span style="font-size:16px">(Click next to continue!)</span>`;
+            travelChoice.style.display = 'none';
+        }
 
         // Setup dots
         story.forEach((_, index) => {
@@ -387,7 +322,7 @@
         function updateDots() { document.querySelectorAll('.dot').forEach((dot, index) => { dot.classList.toggle('active', index === currentIndex); }); }
 
         function startStory() {
-            bgMusic.volume = 0.3; bgMusic.play().catch(e => console.log("Audio autoplay blocked."));
+            bgMusic.volume = 0.4; bgMusic.play().catch(e => console.log("Audio autoplay blocked."));
             introScreen.style.opacity = '0'; introScreen.style.transform = 'scale(1.2)';
             setTimeout(() => {
                 introScreen.style.display = 'none'; mainContent.style.display = 'flex'; updateSlide();
@@ -399,33 +334,13 @@
             }, 800);
         }
 
-        function setWeather(type) {
-            weatherContainer.innerHTML = ''; clearInterval(weatherInterval);
-            if (type === 'rain') {
-                weatherInterval = setInterval(() => {
-                    const drop = document.createElement('div'); drop.classList.add('drop');
-                    drop.style.left = Math.random() * 100 + 'vw'; drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
-                    weatherContainer.appendChild(drop); setTimeout(() => drop.remove(), 1000);
-                }, 50);
-            } else if (type === 'sparkle') {
-                weatherInterval = setInterval(() => {
-                    const sparkle = document.createElement('div'); sparkle.classList.add('sparkle'); sparkle.innerHTML = '✨';
-                    sparkle.style.left = Math.random() * 100 + 'vw'; sparkle.style.top = Math.random() * 100 + 'vh';
-                    weatherContainer.appendChild(sparkle); setTimeout(() => sparkle.remove(), 2000);
-                }, 300);
-            }
-        }
-
         function typeWriter(text, i) {
             if (i < text.length) {
-                // Allows HTML tags like <br> and <i> to render instantly
+                // Quick tag bypass for <br> or <b>
                 if(text.charAt(i) === '<') {
-                    let tag = '';
-                    while(text.charAt(i) !== '>' && i < text.length) { tag += text.charAt(i); i++; }
-                    tag += '>';
+                    let tag = ''; while(text.charAt(i) !== '>' && i < text.length) { tag += text.charAt(i); i++; } tag += '>';
                     messageText.innerHTML = messageText.innerHTML.replace('<span class="typing-cursor"></span>', '') + tag + '<span class="typing-cursor"></span>';
-                    typeWriter(text, i + 1);
-                    return;
+                    typeWriter(text, i + 1); return;
                 }
 
                 messageText.innerHTML = messageText.innerHTML.replace('<span class="typing-cursor"></span>', '') + text.charAt(i) + '<span class="typing-cursor"></span>';
@@ -437,33 +352,30 @@
             }
         }
 
-        // Handles what happens after text finishes typing
         function handleSlideAction() {
-            const action = story[currentIndex].action;
+            const current = story[currentIndex];
             
-            if (action === 'wipe') {
-                waitingForAction = true;
-                nextBtn.disabled = true;
-                nextBtn.textContent = "Tap my face to wipe tears...";
-            } 
-            else if (action === 'slider') {
+            if(current.action === 'pack') {
                 waitingForAction = true;
                 interactiveContainer.style.display = 'block';
-                sliderWrapper.style.display = 'flex';
-                missSlider.value = 0;
-                sliderValue.textContent = '0%';
+                packGame.style.display = 'flex';
                 nextBtn.disabled = true;
-                nextBtn.textContent = "Drag the slider...";
+                nextBtn.textContent = "Pack all 4 items to continue";
             } 
-            else if (action === 'promises') {
+            else if(current.action === 'travel') {
                 waitingForAction = true;
                 interactiveContainer.style.display = 'block';
-                promisesWrapper.style.display = 'block';
+                travelChoice.style.display = 'flex';
                 nextBtn.disabled = true;
-                nextBtn.textContent = "Accept promises to continue";
-            } 
+                nextBtn.textContent = "Select a travel method above";
+            }
+            else if(current.isQuestion) {
+                nextBtn.style.display = 'none';
+                yesBtn.style.display = 'block';
+                noBtn.style.display = 'block';
+            }
             else {
-                nextBtn.disabled = false; 
+                nextBtn.disabled = false;
                 nextBtn.textContent = "Next ➔";
             }
         }
@@ -476,27 +388,17 @@
             waitingForAction = false;
             nextBtn.disabled = true; 
             
-            // Reset special states
+            // Reset interactive areas
             interactiveContainer.style.display = 'none';
-            promisesWrapper.style.display = 'none'; 
-            sliderWrapper.style.display = 'none';
-            blob.classList.remove('wiped');
+            packGame.style.display = 'none';
+            travelChoice.style.display = 'none';
             
             messageText.innerHTML = '<span class="typing-cursor"></span>';
             setTimeout(() => typeWriter(current.text, 0), 200);
 
             blob.className = 'blob ' + current.emotion;
             body.style.backgroundColor = current.bg;
-            setWeather(current.weather);
             updateDots();
-
-            if (currentIndex === story.length - 1) {
-                nextBtn.style.display = 'none';
-                setTimeout(() => {
-                    forgiveBtn.style.display = 'block';
-                    runawayBtn.style.display = 'block';
-                }, current.text.length * 35 + 500);
-            }
         }
 
         nextBtn.addEventListener('click', () => {
@@ -507,37 +409,41 @@
             }
         });
 
-        runawayBtn.addEventListener('mouseover', moveButton);
-        runawayBtn.addEventListener('touchstart', moveButton);
+        // The "No" button dodges!
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('touchstart', moveButton);
 
         function moveButton(e) {
             e.preventDefault();
-            const randomX = Math.floor(Math.random() * (window.innerWidth - runawayBtn.clientWidth));
-            const randomY = Math.floor(Math.random() * (window.innerHeight - runawayBtn.clientHeight - 100));
-            runawayBtn.style.position = 'fixed'; runawayBtn.style.left = randomX + 'px'; runawayBtn.style.top = randomY + 'px';
+            const randomX = Math.floor(Math.random() * (window.innerWidth - noBtn.clientWidth));
+            const randomY = Math.floor(Math.random() * (window.innerHeight - noBtn.clientHeight - 100));
+            noBtn.style.position = 'fixed'; noBtn.style.left = randomX + 'px'; noBtn.style.top = randomY + 'px';
         }
 
-        forgiveBtn.addEventListener('click', () => {
-            setWeather('none');
-            messageText.innerHTML = "Thank you so much! I love you! 💕 Let's make memories!";
+        yesBtn.addEventListener('click', () => {
+            messageText.innerHTML = "YAY! We are making memories! 🧳💕";
             blob.className = 'blob love';
-            forgiveBtn.style.display = 'none'; runawayBtn.style.display = 'none';
-            interactiveContainer.style.display = 'none';
+            yesBtn.style.display = 'none'; noBtn.style.display = 'none';
             document.getElementById('dialogue-wrapper').style.display = 'none'; 
-            body.style.backgroundColor = '#ffe6e6';
             
-            // Show End Presents (Polaroid & Coupon)
-            endPresents.style.display = 'flex';
-            
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const heart = document.createElement('div'); heart.classList.add('heart-fly');
-                    heart.innerHTML = ['❤️', '💖', '💕', '🥰'][Math.floor(Math.random() * 4)];
-                    heart.style.left = Math.random() * 100 + 'vw'; heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
-                    document.body.appendChild(heart); setTimeout(() => heart.remove(), 5000);
-                }, i * 100);
-            }
+            ticketContainer.style.display = 'flex';
+            fireConfetti();
         });
+
+        function fireConfetti() {
+            const colors = ['#ff8c42', '#ff4d88', '#4CAF50', '#80c1ff', '#ffd700'];
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 30);
+            }
+        }
     </script>
 </body>
 </html>
