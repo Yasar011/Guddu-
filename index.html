@@ -3,447 +3,361 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pack your bags... ✈️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <title>To Srushti</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    
     <style>
-        :root {
-            --bg-color: #e6f7ff;
-            --blob-color: #ffffff;
-            --text-color: #555555;
-        }
-
         body {
-            margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            min-height: 100vh; background-color: var(--bg-color); font-family: 'Nunito', sans-serif;
-            text-align: center; color: var(--text-color); transition: background-color 1.5s ease;
-            overflow: hidden; position: relative; user-select: none;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, #02000a 0%, #0a0a1a 100%);
+            color: #d1d1e0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* --- Suitcase Intro Screen --- */
-        #intro-screen {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #ffdab9;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 100; transition: opacity 1s ease, transform 1s ease;
+        /* Twinkling stars background effect */
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
         }
 
-        .suitcase-icon {
-            font-size: 80px; cursor: pointer; animation: bounce 1.5s infinite ease-in-out;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.2));
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) infinite ease-in-out alternate;
+            animation-delay: var(--delay);
         }
 
-        .envelope-text {
-            margin-top: 20px; font-family: 'Pacifico', cursive; font-size: 26px; color: #d84315;
-            animation: pulse 1.5s infinite alternate;
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.8); }
+            100% { opacity: 0.8; transform: scale(1.2); }
         }
 
-        /* --- Main Story Container --- */
-        #main-content {
-            display: none; flex-direction: column; align-items: center; width: 100%; z-index: 10;
+        .moon {
+            position: fixed;
+            top: 15%;
+            right: 15%;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #ffffff, #e0e0e0 40%, #a0a0a0 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 
+                        0 0 100px rgba(255, 255, 255, 0.2), 
+                        inset -15px -15px 30px rgba(0,0,0,0.3);
+            z-index: -1;
+            /* Will be manipulated by JS on scroll */
+            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+            opacity: 0.9;
         }
 
-        /* --- Animated Blob Character --- */
-        #character-container { position: relative; margin-bottom: 20px; cursor: pointer; z-index: 20;}
-
-        .blob {
-            width: 160px; height: 150px; background-color: var(--blob-color);
-            border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
-            box-shadow: 0 15px 25px rgba(0,0,0,0.08); position: relative;
-            animation: float 3s ease-in-out infinite; transition: all 0.5s ease;
+        .shooting-star {
+            position: absolute;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0));
+            border-radius: 50%;
+            transform: rotate(-45deg);
+            animation: shoot 2s linear infinite;
+            opacity: 0;
+            z-index: -1;
         }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.05); opacity: 1; } }
-
-        /* Facial Features */
-        .face { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 100%; transition: all 0.3s ease; }
-        .eye { position: absolute; width: 14px; height: 14px; background-color: #444; border-radius: 50%; top: 40px; transition: all 0.3s ease; }
-        .eye.left { left: 45px; } .eye.right { right: 45px; }
-        .mouth { position: absolute; width: 20px; height: 10px; border-bottom: 3px solid #444; border-radius: 50%; top: 60px; left: 50%; transform: translateX(-50%); transition: all 0.3s ease; }
-        .blush { position: absolute; width: 25px; height: 12px; background-color: #ffb3b3; border-radius: 50%; top: 55px; opacity: 0; transition: opacity 0.3s ease; }
-        .blush.left { left: 25px; } .blush.right { right: 25px; }
-
-        /* Emotions */
-        .curious .eye { width: 16px; height: 16px; top: 38px; }
-        .curious .mouth { width: 12px; height: 12px; border: 3px solid #444; border-radius: 50%; top: 62px; background: transparent;}
-        .excited .eye { height: 4px; border-radius: 10px; top: 45px; }
-        .excited .mouth { width: 25px; height: 15px; border-bottom: 4px solid #444; top: 55px; }
-        .excited .blush { opacity: 1; }
-        .pleading .eye { width: 18px; height: 18px; top: 38px; }
-        .pleading .eye::after { content: ''; position: absolute; width: 6px; height: 6px; background: white; border-radius: 50%; top: 2px; left: 2px; }
-        .pleading .mouth { width: 10px; height: 10px; border: 3px solid #444; border-radius: 50%; top: 62px; background: #ff9999;}
-        .pleading .blush { opacity: 0.6; }
-        .love .eye { background-color: transparent; }
-        .love .eye::before { content: '❤️'; font-size: 24px; position: absolute; top: -14px; left: -5px; animation: pulse 1s infinite alternate; }
-        .love .mouth { width: 20px; height: 15px; border-bottom: 3px solid #444; top: 55px; }
-        .love .blush { opacity: 0.8; }
-
-        /* Sunglasses for the cool travel blob! */
-        .cool .eye { display: none; }
-        .cool .mouth { width: 20px; height: 10px; border-bottom: 3px solid #444; top: 60px; }
-        .cool::after { content: '🕶️'; font-size: 55px; position: absolute; top: 15px; left: 50%; transform: translateX(-50%); z-index: 5; }
-
-        /* --- Dialogue Box --- */
-        #dialogue-wrapper { position: relative; margin-bottom: 30px; z-index: 20; width: 100%; max-width: 500px; display: flex; flex-direction: column; align-items: center; }
-        #dialogue-box {
-            background: white; padding: 25px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 85%;
-            font-size: 20px; position: relative; line-height: 1.6; min-height: 100px;
-            display: flex; align-items: center; justify-content: center; flex-direction: column;
+        @keyframes shoot {
+            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
+            100% { transform: translateX(-1000px) translateY(1000px) rotate(-45deg); opacity: 0; }
         }
-        #dialogue-box::after { content: ''; position: absolute; top: -15px; left: 50%; margin-left: -15px; border-width: 0 15px 15px 15px; border-style: solid; border-color: transparent transparent white transparent; }
-        
-        #message-text { display: inline-block; min-height: 80px; width: 100%; }
-        .typing-cursor { border-right: 2px solid #555; animation: blink 0.7s infinite; }
-        @keyframes blink { 0%, 100% { border-color: transparent; } 50% { border-color: #555; } }
 
-        /* --- Interactive Mini Games --- */
-        #interactive-container { width: 100%; display: none; margin-top: 15px; }
-        
-        /* Game 1: Packing */
-        #pack-game { display: none; flex-wrap: wrap; justify-content: center; gap: 20px; background: #fff0f5; padding: 15px; border-radius: 15px; border: 2px dashed #ffb3c6; }
-        .pack-item { font-size: 45px; cursor: pointer; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
-        .pack-item:hover { transform: scale(1.1) rotate(5deg); }
-        .pack-item.packed { transform: scale(0) rotate(-45deg); opacity: 0; pointer-events: none; }
-
-        /* Game 2: Travel Choice */
-        #travel-choice { display: none; flex-wrap: wrap; justify-content: center; gap: 10px; background: #e6f7ff; padding: 15px; border-radius: 15px; border: 2px dashed #80c1ff; }
-        .travel-btn { background: white; color: #555; border: 2px solid #80c1ff; padding: 10px 20px; font-size: 16px; border-radius: 20px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .travel-btn:hover { background: #80c1ff; color: white; transform: translateY(-2px); }
-
-        /* --- Buttons --- */
-        .btn-container { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; min-height: 60px; position: relative; width: 100%; z-index: 20; }
-        .main-btn { background-color: #ff8c42; color: white; border: none; padding: 15px 40px; font-size: 18px; font-weight: bold; border-radius: 30px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 5px 15px rgba(255, 140, 66, 0.4); font-family: 'Nunito', sans-serif; }
-        .main-btn:hover { background-color: #e87024; transform: translateY(-2px); }
-        .main-btn:disabled { background-color: #ccc !important; cursor: not-allowed; box-shadow: none; transform: none; }
-        
-        #yes-btn { display: none; background-color: #4CAF50; box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4); }
-        #yes-btn:hover { background-color: #45a049; }
-        #no-btn { display: none; background-color: #f44336; }
-
-        /* --- VIP Ticket (End Screen) --- */
-        #ticket-container {
-            display: none; width: 90%; max-width: 400px; background: white;
-            border-radius: 15px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            margin-top: 10px; animation: dropInTicket 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            position: relative; z-index: 10; flex-direction: row; border: 2px solid #ffccbc;
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4f46e5, #9333ea, #db2777, #4f46e5);
+            background-size: 200% auto;
+            width: 0%;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.8);
+            animation: shimmer 2s linear infinite;
         }
-        .ticket-left { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); padding: 20px; color: white; flex: 2; text-align: left; border-right: 3px dashed white; position: relative; }
-        .ticket-right { background: #fff; padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; color: #ff8c42; }
-        .ticket-title { font-family: 'Pacifico', cursive; font-size: 24px; margin: 0 0 10px 0; text-shadow: 1px 1px 2px rgba(0,0,0,0.1); }
-        .ticket-detail { margin: 5px 0; font-size: 16px; font-weight: bold; }
-        .ticket-small { font-size: 12px; opacity: 0.9; margin: 0; }
-        .barcode { font-family: 'Courier New', Courier, monospace; font-size: 20px; letter-spacing: 2px; margin-top: 10px; font-weight: bold; color: #444; transform: rotate(90deg); }
-        @keyframes dropInTicket { 0% { opacity: 0; transform: translateY(-50px) scale(0.9) rotate(-5deg); } 100% { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
 
-        /* --- Particle Effects --- */
-        .confetti { position: absolute; width: 10px; height: 10px; background-color: #f00; z-index: 1000; animation: fall linear forwards; }
-        @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
-        
-        .floating-word {
-            position: absolute; font-family: 'Pacifico', cursive; color: #ff8c42;
-            font-size: 22px; pointer-events: none; z-index: 100; font-weight: bold;
-            text-shadow: 0 2px 5px rgba(255,255,255,0.8); animation: floatWordAnim 2s ease-out forwards;
+        @keyframes shimmer {
+            to { background-position: 200% center; }
         }
-        @keyframes floatWordAnim { 0% { transform: translate(-50%, 0) scale(0.5); opacity: 0; } 20% { opacity: 1; transform: translate(-50%, -30px) scale(1.2); } 100% { transform: translate(-50%, -100px) scale(1); opacity: 0; } }
 
-        /* Progress Dots */
-        #progress-dots { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; justify-content: center; }
-        .dot { width: 8px; height: 8px; background-color: #ddd; border-radius: 50%; transition: all 0.3s ease; }
-        .dot.active { background-color: #ff8c42; transform: scale(1.3); }
+        .content-wrapper {
+            max-width: 600px;
+            width: 90%;
+            padding: 80px 0 150px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 60px; /* Space between paragraphs to force scrolling */
+        }
 
-        @media (max-width: 500px) {
-            #dialogue-box { font-size: 18px; padding: 20px; width: 85%; }
-            .main-btn { padding: 12px 25px; font-size: 16px; }
-            .ticket-left { padding: 15px; } .ticket-title { font-size: 20px; } .ticket-detail { font-size: 14px; }
-            .pack-item { font-size: 35px; }
+        p {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin: 0;
+            text-align: left;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        p.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .serif-text {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .opening {
+            font-style: italic;
+            color: #8c8c9f;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .highlight {
+            color: #ffffff;
+            font-weight: 400;
+        }
+
+        .sign-off {
+            margin-top: 40px;
+            font-size: 1.3rem;
+            color: #ffffff;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 40px;
+        }
+
+        .pulse-text {
+            display: inline-block;
+            margin-top: 15px;
+            animation: pulse 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.8; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
+            50% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,0.8); }
+        }
+
+        .mountains {
+            position: fixed;
+            bottom: -50px;
+            left: 0;
+            width: 100vw;
+            height: 30vh;
+            /* Subtle dark mountain vector */
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2304030f" fill-opacity="1" d="M0,256L48,229.3C96,203,192,149,288,154.7C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+            z-index: -1;
+            transition: transform 0.1s ease-out;
+        }
+
+        .firefly {
+            position: absolute;
+            background-color: #e2e8f0;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
+            opacity: 0;
+            animation: float-up var(--duration) linear infinite;
+            animation-delay: var(--delay);
+            z-index: 0;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            20% { opacity: 0.6; }
+            80% { opacity: 0.6; }
+            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Acoustic Travel Music -->
-    <audio id="bg-music" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-sun-and-his-daughter-580.mp3" type="audio/mpeg">
-    </audio>
+    <div class="scroll-progress" id="progressBar"></div>
+    <div class="moon" id="moon"></div>
 
-    <div id="intro-screen">
-        <div class="suitcase-icon" onclick="startStory()">🧳</div>
-        <div class="envelope-text">Tap to unpack...</div>
-    </div>
+    <div class="stars-container" id="stars"></div>
+    <div class="mountains" id="mountains"></div>
 
-    <div id="main-content">
-        <div id="character-container">
-            <div id="blob" class="blob curious">
-                <div class="face">
-                    <div class="blush left"></div>
-                    <div class="blush right"></div>
-                    <div class="eye left"></div>
-                    <div class="eye right"></div>
-                    <div class="mouth"></div>
-                </div>
-            </div>
-        </div>
+    <div class="content-wrapper">
+        <p class="opening serif-text fade-element">If you are reading this, it means I have already left the college.</p>
+        
+        <p class="fade-element">I still remember exactly how this all started. What began with us just talking in the club turned into something that completely took over my heart.</p>
+        
+        <p class="fade-element">I have been thinking about all of it—the long walks where it felt like time just stopped, the trips up to the <span class="highlight serif-text italic">pahhadi</span> where we left the rest of college behind, and our first kiss under the moon.</p>
+        
+        <p class="fade-element">I remember how you were the only one who made sure to message and wish me right on time for my birthday. And that gift you gave me... that was the very first time I had ever received a gift from a friend instead of just my family. You have no idea how much that meant to me.</p>
+        
+        <p class="fade-element">We played that game where you said, <span class="highlight serif-text italic">"If there is a moon, there is no love. If there is no moon, you never loved me."</span> I told you there was no moon that night, and I won.</p>
+        
+        <p class="fade-element">But the truth is, I didn't need to win a game to prove my feelings. My love was always right there, shining right in front of you, even when you started looking at someone else.</p>
+        
+        <p class="fade-element">I thought if I just loved you enough, if I was always there, you would eventually see it. I held onto those memories every single day. Every time I brought gifts back from my trips for you, every late night I stayed up to help you with your work, every time I stood by you—I did it because I loved you deeply.</p>
+        
+        <p class="fade-element">But it broke something in me every time I saw you prioritize someone else. The times you dropped my calls, the times you made me feel invisible while you gave your attention to a man who couldn't even give you a real future. I sat there, helping you through your tears over him, while swallowing my own.</p>
+        
+        <p class="fade-element">You used to get upset when I got angry about you talking about him. You told me that if I really loved you, I wouldn't get angry, ghost you, or disrespect you. But my anger wasn't a lack of love. It was the absolute agony of watching the person I gave my heart to give hers to someone else, while expecting me to just sit there, smile, and be your emotional support.</p>
+        
+        <p class="fade-element">That is exactly why I lashed out during the IIT concert. I knew my headspace wasn't right. I warned you that I was hurting and asked for space so I wouldn't say anything bad. But you pushed me to speak anyway, telling me I could say anything. The pressure of pretending to be okay finally broke me. I said harsh things, and I am sorry for that, but you need to understand it came from the deep frustration of constantly being pushed to my breaking point.</p>
+        
+        <p class="fade-element text-gray-400">
+            I know I hurt you in other ways recently, too. When I ignored your calls or when I acted cold... I didn't do it to be toxic. I did it because I was drowning. I was hurting so much from being pushed aside and dropped the second his name appeared on your phone. 
+            <br><br>
+            <span class="text-gray-300">I just wanted you to feel, even for a fraction of a second, the silence and the coldness you left me in. It wasn't right, and it wasn't who I am, but it was the only way I knew how to protect myself from a heart that was tired of bleeding.</span>
+        </p>
+        
+        <p class="fade-element">You asked if we could just be good friends. But I cannot be a friend to someone I loved this deeply. I refuse to sit on the sidelines, pretending I am okay, just to be your emotional sponge when things go wrong.</p>
 
-        <div id="dialogue-wrapper">
-            <div id="dialogue-box">
-                <span id="message-text"></span>
-                
-                <!-- Interactive Games Container -->
-                <div id="interactive-container">
-                    
-                    <!-- Game 1: Packing -->
-                    <div id="pack-game">
-                        <span class="pack-item" onclick="packItem(this)">📸</span>
-                        <span class="pack-item" onclick="packItem(this)">🕶️</span>
-                        <span class="pack-item" onclick="packItem(this)">🧴</span>
-                        <span class="pack-item" onclick="packItem(this)">👗</span>
-                    </div>
-
-                    <!-- Game 2: Travel Selector -->
-                    <div id="travel-choice">
-                        <button class="travel-btn" onclick="chooseTravel('Flight ✈️')">Flight ✈️</button>
-                        <button class="travel-btn" onclick="chooseTravel('Train 🚂')">Train 🚂</button>
-                        <button class="travel-btn" onclick="chooseTravel('Road Trip 🚗')">Road Trip 🚗</button>
-                    </div>
-
-                </div>
-
-                <div id="progress-dots"></div>
-            </div>
-        </div>
-
-        <!-- The Final VIP Ticket -->
-        <div id="ticket-container">
-            <div class="ticket-left">
-                <h3 class="ticket-title">Getaway Pass ✨</h3>
-                <p class="ticket-small">PASSENGER:</p>
-                <p class="ticket-detail">The Most Special Girl 💕</p>
-                <p class="ticket-small">DESTINATION:</p>
-                <p class="ticket-detail">Jaipur (The Pink City) 🏰</p>
-            </div>
-            <div class="ticket-right">
-                <p class="ticket-small">ONE WAY TO</p>
-                <h3 style="margin: 5px 0;">Memories</h3>
-                <div class="barcode">|||||||||</div>
-            </div>
-        </div>
-
-        <div class="btn-container" id="btn-wrap">
-            <button class="main-btn" id="next-btn">Next ➔</button>
-            <button class="main-btn" id="yes-btn">Yes! Let's go! ✈️</button>
-            <button class="main-btn" id="no-btn">No way 🙅‍♀️</button>
-        </div>
+        <p class="fade-element">Holding onto a beautiful memory isn't enough when the reality is breaking my heart. I cannot keep fighting for a connection where I am just an option, waiting in the dark for you to choose me.</p>
+        
+        <p class="fade-element">Those memories on the <span class="highlight serif-text italic">pahhadi</span>, that first birthday wish, and that first kiss will always be special to me, but I have to leave them behind now. You made your choice, and now I have to choose my own peace.</p>
+        
+        <p class="fade-element sign-off serif-text">I really did love you, Srushti. <br><br><span class="pulse-text">Goodbye.</span></p>
     </div>
 
     <script>
-        const story = [
-            { text: "Hey! So... since we have a long week off from college...", emotion: "curious", bg: "#e6f7ff" },
-            { text: "I was thinking... we need a proper getaway. Just the two of us.", emotion: "excited", bg: "#e6ffe6" },
-            { text: "To leave all the stress behind, relax, and finally make those beautiful memories.", emotion: "love", bg: "#fff0f5" },
-            { text: "I've chosen the perfect destination... The Pink City, Jaipur! 🏰🐪🌸", emotion: "cool", bg: "#ffebcc" },
-            
-            // GAME 1: PACKING
-            { text: "But wait! I can't do this alone. Tap the items below to help me pack the suitcase! 🧳", emotion: "curious", bg: "#ffe4e1", action: "pack" },
-            
-            // GAME 2: TRAVEL CHOICE
-            { text: "Awesome! Everything is packed. Now, how do you want to travel there?", emotion: "excited", bg: "#e0ffff", action: "travel" },
-            
-            { text: "Perfect! Everything is set. Now for the most important question...", emotion: "pleading", bg: "#ffccbc" },
-            { text: "Will you go on this trip with me? 🥺❤️", emotion: "love", bg: "#ffb6c1", isQuestion: true }
-        ];
+        // Generate random stars for the background
+        const starsContainer = document.getElementById('stars');
+        const numStars = 100;
 
-        let currentIndex = 0;
-        let isTyping = false;
-        let typingTimeout;
-        let waitingForAction = false;
-        
-        const introScreen = document.getElementById('intro-screen');
-        const mainContent = document.getElementById('main-content');
-        const blob = document.getElementById('blob');
-        const messageText = document.getElementById('message-text');
-        const nextBtn = document.getElementById('next-btn');
-        const yesBtn = document.getElementById('yes-btn');
-        const noBtn = document.getElementById('no-btn');
-        const body = document.body;
-        const progressContainer = document.getElementById('progress-dots');
-        const interactiveContainer = document.getElementById('interactive-container');
-        const packGame = document.getElementById('pack-game');
-        const travelChoice = document.getElementById('travel-choice');
-        const ticketContainer = document.getElementById('ticket-container');
-        const bgMusic = document.getElementById('bg-music');
-
-        // --- Floating Words on Tap ---
-        const sweetWords = ["Jaipur! 🏰", "Vacation! ✈️", "Memories! 📸", "So Special! 🌸", "Road Trip! 🚗", "My Girl! 🥰"];
-        document.addEventListener('click', (e) => {
-            if(e.target.tagName === 'BUTTON' || e.target.classList.contains('pack-item') || e.target.closest('#intro-screen')) return;
-            const word = document.createElement('div');
-            word.classList.add('floating-word'); word.textContent = sweetWords[Math.floor(Math.random() * sweetWords.length)];
-            word.style.left = e.pageX + 'px'; word.style.top = e.pageY + 'px';
-            document.body.appendChild(word); setTimeout(() => word.remove(), 2000);
-        });
-
-        // --- Mini Game 1: Packing Logic ---
-        let itemsPacked = 0;
-        function packItem(el) {
-            if(el.classList.contains('packed')) return;
-            el.classList.add('packed');
-            itemsPacked++;
+        for (let i = 0; i < numStars; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
             
-            // Spawn a cute text when packed
-            const pop = document.createElement('div'); pop.classList.add('floating-word'); pop.textContent = "Packed! ✔️";
-            pop.style.left = '50%'; pop.style.top = '40%'; document.body.appendChild(pop); setTimeout(() => pop.remove(), 1000);
+            // Randomize position, size, and animation timing
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = Math.random() * 2 + 1;
+            const duration = Math.random() * 3 + 2; // 2s to 5s
+            const delay = Math.random() * 5;
 
-            if(itemsPacked === 4) {
-                setTimeout(() => {
-                    waitingForAction = false;
-                    nextBtn.disabled = false;
-                    nextBtn.textContent = "All packed! Next ➔";
-                }, 500);
-            }
+            star.style.left = `${x}vw`;
+            star.style.top = `${y}vh`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.setProperty('--duration', `${duration}s`);
+            star.style.setProperty('--delay', `${delay}s`);
+
+            starsContainer.appendChild(star);
         }
 
-        // --- Mini Game 2: Travel Logic ---
-        function chooseTravel(method) {
-            waitingForAction = false;
-            nextBtn.disabled = false;
-            nextBtn.textContent = "Next ➔";
+        const numShootingStars = 6;
+        for (let i = 0; i < numShootingStars; i++) {
+            const shootingStar = document.createElement('div');
+            shootingStar.classList.add('shooting-star');
             
-            // Instantly update the text to react to her choice!
-            messageText.innerHTML = `Yay! A <b>${method}</b> sounds perfect for us. <br><br><span style="font-size:16px">(Click next to continue!)</span>`;
-            travelChoice.style.display = 'none';
+            const x = Math.random() * 150; // Can start off-screen right
+            const y = Math.random() * 50;  // Start in top half
+            const delay = Math.random() * 8; // Random delay
+            const duration = Math.random() * 2 + 1.5; // Random speed
+
+            shootingStar.style.left = `${x}vw`;
+            shootingStar.style.top = `${y}vh`;
+            shootingStar.style.animationDelay = `${delay}s`;
+            shootingStar.style.animationDuration = `${duration}s`;
+
+            starsContainer.appendChild(shootingStar);
         }
 
-        // Setup dots
-        story.forEach((_, index) => {
-            const dot = document.createElement('div'); dot.classList.add('dot');
-            if(index === 0) dot.classList.add('active'); progressContainer.appendChild(dot);
-        });
+        // Generate floating fireflies/dust
+        const numFireflies = 25;
+        for (let i = 0; i < numFireflies; i++) {
+            const firefly = document.createElement('div');
+            firefly.classList.add('firefly');
+            
+            const size = Math.random() * 3 + 1;
+            firefly.style.width = `${size}px`;
+            firefly.style.height = `${size}px`;
+            firefly.style.left = `${Math.random() * 100}vw`;
+            
+            firefly.style.setProperty('--duration', `${Math.random() * 15 + 10}s`); // 10s to 25s
+            firefly.style.setProperty('--delay', `${Math.random() * 10}s`);
+            
+            starsContainer.appendChild(firefly);
+        }
 
-        function updateDots() { document.querySelectorAll('.dot').forEach((dot, index) => { dot.classList.toggle('active', index === currentIndex); }); }
+        // Scroll Event Listener for Progress Bar and Fading Moon
+        window.addEventListener('scroll', () => {
+            // 1. Update Scroll Progress Bar
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progressBar").style.width = scrolled + "%";
 
-        function startStory() {
-            bgMusic.volume = 0.4; bgMusic.play().catch(e => console.log("Audio autoplay blocked."));
-            introScreen.style.opacity = '0'; introScreen.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                introScreen.style.display = 'none'; mainContent.style.display = 'flex'; updateSlide();
+            // 2. Moon Parallax and Fade Effect
+            // The moon slowly disappears as she scrolls down, representing the "no moon" reality
+            const moon = document.getElementById("moon");
+            if (moon) {
+                // Fades out completely by the time she is 80% down the page
+                const fadeRate = 1 - (winScroll / (height * 0.8)); 
+                const moveUp = winScroll * 0.4; // Slowly moves up the screen
                 
-                setTimeout(() => {
-                    const hint = document.createElement('div'); hint.classList.add('floating-word'); hint.textContent = "Tap the background! ✨";
-                    hint.style.left = '50%'; hint.style.top = '20%'; document.body.appendChild(hint); setTimeout(() => hint.remove(), 2500);
-                }, 1000);
-            }, 800);
-        }
-
-        function typeWriter(text, i) {
-            if (i < text.length) {
-                // Quick tag bypass for <br> or <b>
-                if(text.charAt(i) === '<') {
-                    let tag = ''; while(text.charAt(i) !== '>' && i < text.length) { tag += text.charAt(i); i++; } tag += '>';
-                    messageText.innerHTML = messageText.innerHTML.replace('<span class="typing-cursor"></span>', '') + tag + '<span class="typing-cursor"></span>';
-                    typeWriter(text, i + 1); return;
-                }
-
-                messageText.innerHTML = messageText.innerHTML.replace('<span class="typing-cursor"></span>', '') + text.charAt(i) + '<span class="typing-cursor"></span>';
-                typingTimeout = setTimeout(() => typeWriter(text, i + 1), 35); 
-            } else {
-                messageText.innerHTML = text; 
-                isTyping = false;
-                handleSlideAction();
-            }
-        }
-
-        function handleSlideAction() {
-            const current = story[currentIndex];
-            
-            if(current.action === 'pack') {
-                waitingForAction = true;
-                interactiveContainer.style.display = 'block';
-                packGame.style.display = 'flex';
-                nextBtn.disabled = true;
-                nextBtn.textContent = "Pack all 4 items to continue";
-            } 
-            else if(current.action === 'travel') {
-                waitingForAction = true;
-                interactiveContainer.style.display = 'block';
-                travelChoice.style.display = 'flex';
-                nextBtn.disabled = true;
-                nextBtn.textContent = "Select a travel method above";
-            }
-            else if(current.isQuestion) {
-                nextBtn.style.display = 'none';
-                yesBtn.style.display = 'block';
-                noBtn.style.display = 'block';
-            }
-            else {
-                nextBtn.disabled = false;
-                nextBtn.textContent = "Next ➔";
-            }
-        }
-
-        function updateSlide() {
-            const current = story[currentIndex];
-            
-            clearTimeout(typingTimeout);
-            isTyping = true;
-            waitingForAction = false;
-            nextBtn.disabled = true; 
-            
-            // Reset interactive areas
-            interactiveContainer.style.display = 'none';
-            packGame.style.display = 'none';
-            travelChoice.style.display = 'none';
-            
-            messageText.innerHTML = '<span class="typing-cursor"></span>';
-            setTimeout(() => typeWriter(current.text, 0), 200);
-
-            blob.className = 'blob ' + current.emotion;
-            body.style.backgroundColor = current.bg;
-            updateDots();
-        }
-
-        nextBtn.addEventListener('click', () => {
-            if (isTyping || waitingForAction) return; 
-            if (currentIndex < story.length - 1) {
-                currentIndex++;
-                updateSlide();
+                moon.style.opacity = Math.max(0, fadeRate);
+                moon.style.transform = `translateY(-${moveUp}px)`;
             }
         });
 
-        // The "No" button dodges!
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('touchstart', moveButton);
-
-        function moveButton(e) {
-            e.preventDefault();
-            const randomX = Math.floor(Math.random() * (window.innerWidth - noBtn.clientWidth));
-            const randomY = Math.floor(Math.random() * (window.innerHeight - noBtn.clientHeight - 100));
-            noBtn.style.position = 'fixed'; noBtn.style.left = randomX + 'px'; noBtn.style.top = randomY + 'px';
-        }
-
-        yesBtn.addEventListener('click', () => {
-            messageText.innerHTML = "YAY! We are making memories! 🧳💕";
-            blob.className = 'blob love';
-            yesBtn.style.display = 'none'; noBtn.style.display = 'none';
-            document.getElementById('dialogue-wrapper').style.display = 'none'; 
+        // Interactive Parallax on Mouse Move / Touch
+        function handleParallax(clientX, clientY) {
+            const xAxis = (window.innerWidth / 2 - clientX) / 60;
+            const yAxis = (window.innerHeight / 2 - clientY) / 60;
             
-            ticketContainer.style.display = 'flex';
-            fireConfetti();
-        });
-
-        function fireConfetti() {
-            const colors = ['#ff8c42', '#ff4d88', '#4CAF50', '#80c1ff', '#ffd700'];
-            for (let i = 0; i < 100; i++) {
-                setTimeout(() => {
-                    const confetti = document.createElement('div');
-                    confetti.classList.add('confetti');
-                    confetti.style.left = Math.random() * 100 + 'vw';
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                    document.body.appendChild(confetti);
-                    setTimeout(() => confetti.remove(), 4000);
-                }, i * 30);
+            document.getElementById('stars').style.transform = `translate(${xAxis}px, ${yAxis}px)`;
+            
+            const mountains = document.getElementById('mountains');
+            if(mountains) {
+                mountains.style.transform = `translate(${xAxis * 0.3}px, 0px)`; // Subtle shift for mountains
             }
         }
+
+        document.addEventListener('mousemove', (e) => {
+            handleParallax(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if(e.touches.length > 0) {
+                handleParallax(e.touches[0].clientX, e.touches[0].clientY);
+            }
+        });
+
+        // Intersection Observer to trigger fade-in animations on scroll
+        document.addEventListener("DOMContentLoaded", function() {
+            const elements = document.querySelectorAll('.fade-element');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // When the element enters the viewport
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { 
+                threshold: 0.25, // Trigger when 25% of the element is visible
+                rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the bottom
+            });
+
+            elements.forEach(element => {
+                observer.observe(element);
+            });
+        });
     </script>
 </body>
 </html>
