@@ -1,363 +1,868 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To Srushti</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
-    
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(180deg, #02000a 0%, #0a0a1a 100%);
-            color: #d1d1e0;
-            font-family: 'Inter', sans-serif;
-            min-height: 100vh;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Moon</title>
+<meta name="description" content="A few things I never said properly." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════════════
+   EDIT THESE TWO LINES — put your names in
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --her-name: "her name";   /* not used by CSS, just a reminder — edit the HTML below */
+}
 
-        /* Twinkling stars background effect */
-        .stars-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            overflow: hidden;
-        }
+/* ---------- design tokens ---------- */
+:root{
+  --bg:#0F0D0C;
+  --bg-2:#17120E;
+  --surface:#1E1813;
+  --amber:#F0A868;
+  --amber-soft:#F5C89A;
+  --rose:#E8927C;
+  --text:#F7F1E9;
+  --muted:#A5917C;
+  --border:rgba(240,168,104,.18);
 
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            opacity: 0;
-            animation: twinkle var(--duration) infinite ease-in-out alternate;
-            animation-delay: var(--delay);
-        }
+  --space-1:8px;  --space-2:16px; --space-3:24px; --space-4:40px;
+  --space-5:64px; --space-6:96px; --space-7:140px;
 
-        @keyframes twinkle {
-            0% { opacity: 0.1; transform: scale(0.8); }
-            100% { opacity: 0.8; transform: scale(1.2); }
-        }
+  --dur:600ms;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
 
-        .moon {
-            position: fixed;
-            top: 15%;
-            right: 15%;
-            width: 120px;
-            height: 120px;
-            background: radial-gradient(circle at 30% 30%, #ffffff, #e0e0e0 40%, #a0a0a0 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.4), 
-                        0 0 100px rgba(255, 255, 255, 0.2), 
-                        inset -15px -15px 30px rgba(0,0,0,0.3);
-            z-index: -1;
-            /* Will be manipulated by JS on scroll */
-            transition: transform 0.1s ease-out, opacity 0.1s ease-out;
-            opacity: 0.9;
-        }
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Quicksand',system-ui,-apple-system,sans-serif;
+  font-size:17px;
+  font-weight:400;
+  line-height:1.75;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{max-width:100%;display:block}
 
-        .shooting-star {
-            position: absolute;
-            width: 150px;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(255,255,255,1), rgba(255,255,255,0));
-            border-radius: 50%;
-            transform: rotate(-45deg);
-            animation: shoot 2s linear infinite;
-            opacity: 0;
-            z-index: -1;
-        }
+/* ---------- film grain ---------- */
+body::after{
+  content:"";
+  position:fixed; inset:0; z-index:9998; pointer-events:none;
+  opacity:.30; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
-        @keyframes shoot {
-            0% { transform: translateX(0) translateY(0) rotate(-45deg); opacity: 1; }
-            100% { transform: translateX(-1000px) translateY(1000px) rotate(-45deg); opacity: 0; }
-        }
+/* ---------- scroll progress ---------- */
+.progress{
+  position:fixed; top:0; left:0; height:3px; width:100%; z-index:9999;
+  background:transparent;
+}
+.progress__bar{
+  height:100%; width:0%;
+  background:linear-gradient(90deg,var(--rose),var(--amber));
+  box-shadow:0 0 14px rgba(240,168,104,.7);
+  transition:width 90ms linear;
+}
 
-        .scroll-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #4f46e5, #9333ea, #db2777, #4f46e5);
-            background-size: 200% auto;
-            width: 0%;
-            z-index: 100;
-            box-shadow: 0 0 15px rgba(147, 51, 234, 0.8);
-            animation: shimmer 2s linear infinite;
-        }
+/* ---------- ambient glow (parallax) ---------- */
+.glow{
+  position:fixed; border-radius:50%; filter:blur(110px);
+  pointer-events:none; z-index:0; opacity:.5;
+}
+.glow--a{width:60vw;height:60vw;max-width:700px;max-height:700px;
+  background:radial-gradient(circle,rgba(240,168,104,.34),transparent 68%);
+  top:-14vh; right:-14vw;}
+.glow--b{width:55vw;height:55vw;max-width:620px;max-height:620px;
+  background:radial-gradient(circle,rgba(232,146,124,.26),transparent 68%);
+  bottom:-14vh; left:-14vw;}
 
-        @keyframes shimmer {
-            to { background-position: 200% center; }
-        }
+/* ---------- layout ---------- */
+main{position:relative;z-index:1}
+.wrap{width:min(100% - 2.5rem, 940px); margin-inline:auto}
+.narrow{width:min(100% - 2.5rem, 660px); margin-inline:auto}
 
-        .content-wrapper {
-            max-width: 600px;
-            width: 90%;
-            padding: 80px 0 150px 0;
-            display: flex;
-            flex-direction: column;
-            gap: 60px; /* Space between paragraphs to force scrolling */
-        }
+section{padding-block:var(--space-7)}
 
-        p {
-            font-size: 1.15rem;
-            line-height: 1.8;
-            margin: 0;
-            text-align: left;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1), transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-        }
+/* ---------- reveal animation ---------- */
+.reveal{
+  opacity:0; transform:translateY(34px);
+  transition:opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+  will-change:opacity,transform;
+}
+.reveal.in{opacity:1; transform:none}
+.reveal[data-d="1"]{transition-delay:120ms}
+.reveal[data-d="2"]{transition-delay:240ms}
+.reveal[data-d="3"]{transition-delay:360ms}
 
-        p.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+/* word-by-word */
+.word{
+  display:inline-block;
+  opacity:0; transform:translateY(18px);
+  transition:opacity 560ms var(--ease), transform 560ms var(--ease);
+}
+.split.in .word{opacity:1; transform:none}
 
-        .serif-text {
-            font-family: 'Playfair Display', serif;
-        }
+/* ═══════════ HERO ═══════════ */
+.hero{
+  min-height:100svh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; position:relative;
+  padding:var(--space-5) 1.25rem 130px;
+}
+.hero__kicker{
+  font-family:'Caveat',cursive; font-size:clamp(1.35rem,4vw,1.8rem);
+  color:var(--amber); margin:0 0 var(--space-2);
+}
+.hero__title{
+  font-family:'Caveat',cursive;
+  font-size:clamp(3.4rem,13vw,7.5rem);
+  font-weight:700; line-height:.95; margin:0;
+  background:linear-gradient(135deg,var(--text) 20%,var(--amber-soft) 55%,var(--rose) 90%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero__sub{
+  color:var(--muted); max-width:34ch; margin:var(--space-3) auto 0;
+  font-size:clamp(.98rem,2.4vw,1.1rem);
+}
+/* ---------- the moon ---------- */
+.moon{
+  width:clamp(100px,22vw,180px);
+  aspect-ratio:1; border-radius:50%;
+  margin:0 auto var(--space-3);
+  flex:none;
+  position:relative;
+  background:
+    radial-gradient(circle at 34% 30%, #FFF6E6 0%, #F5DDB8 38%, #E8C08A 62%, #C99A63 100%);
+  box-shadow:
+    0 0 70px rgba(245,200,154,.45),
+    0 0 150px rgba(240,168,104,.28),
+    inset -16px -12px 40px rgba(120,80,45,.42);
+  animation:moonBreathe 7s ease-in-out infinite;
+}
+/* craters */
+.moon::before,.moon::after{
+  content:""; position:absolute; border-radius:50%;
+  background:rgba(150,105,64,.20);
+  box-shadow:inset 2px 2px 5px rgba(120,80,45,.3);
+}
+.moon::before{width:19%;height:19%;top:26%;left:24%}
+.moon::after{width:12%;height:12%;top:57%;left:56%;
+  box-shadow:inset 2px 2px 4px rgba(120,80,45,.3),
+             -160% 60% 0 -2px rgba(150,105,64,.16),
+             40% -230% 0 -1px rgba(150,105,64,.13);}
 
-        .opening {
-            font-style: italic;
-            color: #8c8c9f;
-            text-align: center;
-            font-size: 1rem;
-        }
+@keyframes moonBreathe{
+  0%,100%{box-shadow:0 0 70px rgba(245,200,154,.45),0 0 150px rgba(240,168,104,.28),inset -16px -12px 40px rgba(120,80,45,.42)}
+  50%{box-shadow:0 0 95px rgba(245,200,154,.62),0 0 200px rgba(240,168,104,.4),inset -16px -12px 40px rgba(120,80,45,.42)}
+}
 
-        .highlight {
-            color: #ffffff;
-            font-weight: 400;
-        }
+/* stars */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.star{
+  position:absolute;width:2px;height:2px;border-radius:50%;
+  background:#FFF6E6;
+  animation:twinkle 4s ease-in-out infinite;
+}
+@keyframes twinkle{0%,100%{opacity:.12;transform:scale(.7)}50%{opacity:.85;transform:scale(1)}}
 
-        .sign-off {
-            margin-top: 40px;
-            font-size: 1.3rem;
-            color: #ffffff;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 40px;
-        }
+.scrollcue{
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  color:var(--muted); font-size:.78rem; letter-spacing:.18em; text-transform:uppercase;
+}
+.scrollcue__line{
+  width:1px;height:52px;
+  background:linear-gradient(to bottom,var(--amber),transparent);
+  animation:cue 2.1s ease-in-out infinite;
+}
+@keyframes cue{0%,100%{opacity:.25;transform:scaleY(.55);transform-origin:top}50%{opacity:1;transform:scaleY(1)}}
 
-        .pulse-text {
-            display: inline-block;
-            margin-top: 15px;
-            animation: pulse 3s infinite ease-in-out;
-        }
+/* ═══════════ STATEMENT BLOCKS ═══════════ */
+.statement{
+  font-family:'Caveat',cursive;
+  font-size:clamp(2rem,6.2vw,3.4rem);
+  line-height:1.28; text-align:center; margin:0;
+  color:var(--text);
+}
+.statement em{color:var(--amber); font-style:normal}
+.statement--sm{font-size:clamp(1.6rem,4.6vw,2.4rem)}
+.para{color:var(--muted); text-align:center; margin:var(--space-3) auto 0; max-width:46ch}
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.8; text-shadow: 0 0 5px rgba(255,255,255,0.2); }
-            50% { transform: scale(1.05); opacity: 1; text-shadow: 0 0 20px rgba(255,255,255,0.8); }
-        }
+.rule{
+  width:64px;height:1px;margin:var(--space-5) auto;
+  background:linear-gradient(90deg,transparent,var(--amber),transparent);
+}
 
-        .mountains {
-            position: fixed;
-            bottom: -50px;
-            left: 0;
-            width: 100vw;
-            height: 30vh;
-            /* Subtle dark mountain vector */
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%2304030f" fill-opacity="1" d="M0,256L48,229.3C96,203,192,149,288,154.7C384,160,480,224,576,218.7C672,213,768,139,864,128C960,117,1056,171,1152,197.3C1248,224,1344,224,1392,224L1440,224L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
-            background-size: cover;
-            z-index: -1;
-            transition: transform 0.1s ease-out;
-        }
+/* ═══════════ MEMORY CARDS — 3D ═══════════ */
+.chapter-label{
+  text-align:center; color:var(--amber);
+  font-size:.74rem; letter-spacing:.32em; text-transform:uppercase;
+  margin-bottom:var(--space-2);
+}
 
-        .firefly {
-            position: absolute;
-            background-color: #e2e8f0;
-            border-radius: 50%;
-            box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.4);
-            opacity: 0;
-            animation: float-up var(--duration) linear infinite;
-            animation-delay: var(--delay);
-            z-index: 0;
-        }
+/* the 3D stage */
+.memories{
+  display:flex; flex-direction:column; gap:var(--space-5);
+  perspective:1400px;
+  perspective-origin:50% 50%;
+}
 
-        @keyframes float-up {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translateY(-20vh) scale(1.5); opacity: 0; }
-        }
-    </style>
+.memory{
+  position:relative;
+  transform-style:preserve-3d;
+  padding:var(--space-5) var(--space-4);
+  border-radius:18px;
+  border:1px solid var(--border);
+  background:
+    linear-gradient(135deg,rgba(240,168,104,.09),rgba(232,146,124,.03) 45%,transparent 75%),
+    var(--surface);
+  box-shadow:0 34px 70px -34px rgba(0,0,0,.95);
+  overflow:hidden;
+  isolation:isolate;
+
+  /* start state: pushed back + tilted in 3D */
+  opacity:0;
+  transform:translateZ(-260px) rotateX(26deg) translateY(60px);
+  transition:
+    opacity 900ms var(--ease),
+    transform 1000ms var(--ease),
+    box-shadow 600ms var(--ease),
+    border-color 600ms var(--ease);
+  will-change:transform,opacity;
+}
+.memory.in{
+  opacity:1;
+  transform:translateZ(0) rotateX(0deg) translateY(0);
+}
+/* alternate the tilt direction so it feels hand-placed */
+.memory:nth-child(even){transform:translateZ(-260px) rotateX(26deg) rotateY(-7deg) translateY(60px)}
+.memory:nth-child(odd){transform:translateZ(-260px) rotateX(26deg) rotateY(7deg) translateY(60px)}
+.memory:nth-child(even).in,
+.memory:nth-child(odd).in{transform:translateZ(0) rotateX(0) rotateY(0) translateY(0)}
+
+.memory:hover{
+  border-color:rgba(240,168,104,.45);
+  box-shadow:0 40px 90px -30px rgba(240,168,104,.28);
+}
+
+/* floating ghost number, sits behind in 3D */
+.memory__num{
+  position:absolute; top:-18px; right:28px;
+  font-family:'Caveat',cursive;
+  font-size:clamp(6rem,14vw,10.5rem);
+  line-height:1; font-weight:700;
+  color:rgba(240,168,104,.075);
+  user-select:none; pointer-events:none; z-index:-1;
+  transform:translateZ(-60px);
+}
+
+.memory__inner{transform:translateZ(45px); transform-style:preserve-3d}
+
+.memory__title{
+  font-family:'Caveat',cursive; font-weight:600;
+  font-size:clamp(2.1rem,5.4vw,3.1rem);
+  line-height:1.1; margin:0 0 var(--space-2); color:var(--amber-soft);
+}
+.memory__text{margin:0; color:var(--muted); max-width:56ch}
+
+/* little moon-dot marker */
+.memory__dot{
+  width:9px;height:9px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber-soft),var(--rose));
+  box-shadow:0 0 14px rgba(240,168,104,.75);
+  margin-bottom:var(--space-2);
+}
+
+/* ═══════════ QUIET / CONFESSION ═══════════ */
+.quiet{background:linear-gradient(180deg,transparent,var(--bg-2) 22%,var(--bg-2) 78%,transparent)}
+
+.note{
+  border-left:2px solid var(--amber);
+  padding:var(--space-1) 0 var(--space-1) var(--space-3);
+  margin:var(--space-4) 0; color:var(--text);
+  font-size:1.06rem;
+}
+
+/* ═══════════ THE YES ═══════════ */
+.yes{
+  text-align:center;
+  border:1px solid var(--border); border-radius:20px;
+  padding:var(--space-6) var(--space-3);
+  background:radial-gradient(120% 100% at 50% 0%,rgba(240,168,104,.12),transparent 62%),var(--surface);
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.9);
+}
+.yes__word{
+  font-family:'Caveat',cursive; font-weight:700;
+  font-size:clamp(5rem,20vw,11rem); line-height:.85; margin:0;
+  background:linear-gradient(135deg,var(--amber-soft),var(--rose));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+
+/* ═══════════ COUNTDOWN ═══════════ */
+.months{
+  display:flex; justify-content:center; gap:var(--space-2); flex-wrap:wrap;
+  margin-top:var(--space-4);
+}
+.month{
+  width:112px; padding:var(--space-3) var(--space-1);
+  border:1px solid var(--border); border-radius:14px;
+  background:var(--surface); text-align:center;
+  transition:transform 320ms var(--ease), border-color 320ms var(--ease);
+}
+.month:hover{transform:translateY(-6px); border-color:var(--amber)}
+.month__n{font-family:'Caveat',cursive; font-size:2.6rem; color:var(--amber); line-height:1}
+.month__l{font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted)}
+
+/* moon phases for the four months */
+.phase{
+  width:46px;height:46px;border-radius:50%;margin:0 auto var(--space-2);
+  background:radial-gradient(circle at 34% 30%,#FFF6E6,#E8C08A 70%,#C99A63);
+  box-shadow:0 0 22px rgba(245,200,154,.35);
+  position:relative;overflow:hidden;
+}
+.phase::after{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  background:var(--surface);
+}
+.phase--1::after{transform:translateX(62%)}   /* waxing crescent-ish */
+.phase--2::after{transform:translateX(84%)}
+.phase--3::after{transform:translateX(96%)}
+.phase--4::after{display:none}                /* full moon */
+
+/* ═══════════ ENDING ═══════════ */
+.end{min-height:92svh; display:flex; align-items:center; justify-content:center; text-align:center}
+.sign{
+  font-family:'Caveat',cursive; font-size:clamp(1.5rem,4.4vw,2.1rem);
+  color:var(--muted); margin-top:var(--space-5);
+}
+footer{padding:var(--space-4) 0 var(--space-5); text-align:center; color:rgba(165,145,124,.4); font-size:.8rem}
+
+/* ═══════════ RESPONSIVE ═══════════ */
+@media (max-width:760px){
+  section{padding-block:var(--space-6)}
+  .memories{gap:var(--space-4); perspective:900px}
+  .memory{padding:var(--space-4) var(--space-3)}
+  /* gentler 3D swing on small screens so it doesn't feel seasick */
+  .memory:nth-child(even){transform:translateZ(-150px) rotateX(18deg) rotateY(-4deg) translateY(44px)}
+  .memory:nth-child(odd){transform:translateZ(-150px) rotateX(18deg) rotateY(4deg) translateY(44px)}
+  .memory__inner{transform:translateZ(28px)}
+  .memory__num{font-size:8rem; top:-14px; right:6px}
+  .month{width:calc(50% - var(--space-2))}
+}
+
+/* ═══════════ ACCESSIBILITY ═══════════ */
+:focus-visible{outline:2px solid var(--amber); outline-offset:3px; border-radius:4px}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .word{opacity:1!important;transform:none!important}
+  .memory{opacity:1!important;transform:none!important}
+  .memories{perspective:none}
+  .glow,.stars{display:none}
+}
+</style>
 </head>
 <body>
 
-    <div class="scroll-progress" id="progressBar"></div>
-    <div class="moon" id="moon"></div>
+<div class="progress"><div class="progress__bar" id="bar"></div></div>
+<div class="glow glow--a" data-speed="0.10"></div>
+<div class="glow glow--b" data-speed="-0.07"></div>
+<div class="stars" id="stars" aria-hidden="true"></div>
 
-    <div class="stars-container" id="stars"></div>
-    <div class="mountains" id="mountains"></div>
+<main>
 
-    <div class="content-wrapper">
-        <p class="opening serif-text fade-element">If you are reading this, it means I have already left the college.</p>
-        
-        <p class="fade-element">I still remember exactly how this all started. What began with us just talking in the club turned into something that completely took over my heart.</p>
-        
-        <p class="fade-element">I have been thinking about all of it—the long walks where it felt like time just stopped, the trips up to the <span class="highlight serif-text italic">pahhadi</span> where we left the rest of college behind, and our first kiss under the moon.</p>
-        
-        <p class="fade-element">I remember how you were the only one who made sure to message and wish me right on time for my birthday. And that gift you gave me... that was the very first time I had ever received a gift from a friend instead of just my family. You have no idea how much that meant to me.</p>
-        
-        <p class="fade-element">We played that game where you said, <span class="highlight serif-text italic">"If there is a moon, there is no love. If there is no moon, you never loved me."</span> I told you there was no moon that night, and I won.</p>
-        
-        <p class="fade-element">But the truth is, I didn't need to win a game to prove my feelings. My love was always right there, shining right in front of you, even when you started looking at someone else.</p>
-        
-        <p class="fade-element">I thought if I just loved you enough, if I was always there, you would eventually see it. I held onto those memories every single day. Every time I brought gifts back from my trips for you, every late night I stayed up to help you with your work, every time I stood by you—I did it because I loved you deeply.</p>
-        
-        <p class="fade-element">But it broke something in me every time I saw you prioritize someone else. The times you dropped my calls, the times you made me feel invisible while you gave your attention to a man who couldn't even give you a real future. I sat there, helping you through your tears over him, while swallowing my own.</p>
-        
-        <p class="fade-element">You used to get upset when I got angry about you talking about him. You told me that if I really loved you, I wouldn't get angry, ghost you, or disrespect you. But my anger wasn't a lack of love. It was the absolute agony of watching the person I gave my heart to give hers to someone else, while expecting me to just sit there, smile, and be your emotional support.</p>
-        
-        <p class="fade-element">That is exactly why I lashed out during the IIT concert. I knew my headspace wasn't right. I warned you that I was hurting and asked for space so I wouldn't say anything bad. But you pushed me to speak anyway, telling me I could say anything. The pressure of pretending to be okay finally broke me. I said harsh things, and I am sorry for that, but you need to understand it came from the deep frustration of constantly being pushed to my breaking point.</p>
-        
-        <p class="fade-element text-gray-400">
-            I know I hurt you in other ways recently, too. When I ignored your calls or when I acted cold... I didn't do it to be toxic. I did it because I was drowning. I was hurting so much from being pushed aside and dropped the second his name appeared on your phone. 
-            <br><br>
-            <span class="text-gray-300">I just wanted you to feel, even for a fraction of a second, the silence and the coldness you left me in. It wasn't right, and it wasn't who I am, but it was the only way I knew how to protect myself from a heart that was tired of bleeding.</span>
-        </p>
-        
-        <p class="fade-element">You asked if we could just be good friends. But I cannot be a friend to someone I loved this deeply. I refuse to sit on the sidelines, pretending I am okay, just to be your emotional sponge when things go wrong.</p>
-
-        <p class="fade-element">Holding onto a beautiful memory isn't enough when the reality is breaking my heart. I cannot keep fighting for a connection where I am just an option, waiting in the dark for you to choose me.</p>
-        
-        <p class="fade-element">Those memories on the <span class="highlight serif-text italic">pahhadi</span>, that first birthday wish, and that first kiss will always be special to me, but I have to leave them behind now. You made your choice, and now I have to choose my own peace.</p>
-        
-        <p class="fade-element sign-off serif-text">I really did love you, Srushti. <br><br><span class="pulse-text">Goodbye.</span></p>
+  <!-- ══════════ HERO ══════════ -->
+  <header class="hero">
+    <div class="moon reveal" aria-hidden="true"></div>
+    <p class="hero__kicker reveal" data-d="1">can I still call you —</p>
+    <h1 class="hero__title reveal" data-d="2">My Moon</h1>
+    <p class="hero__sub reveal" data-d="3">
+      I'm bad at saying things out loud.
+      So I built this instead. Scroll slowly.
+    </p>
+    <div class="scrollcue reveal" data-d="3">
+      <span>scroll</span>
+      <span class="scrollcue__line"></span>
     </div>
+  </header>
 
-    <script>
-        // Generate random stars for the background
-        const starsContainer = document.getElementById('stars');
-        const numStars = 100;
+  <!-- ══════════ THE AGREEMENT ══════════ -->
+  <section>
+    <div class="narrow">
+      <p class="statement split reveal">
+        We made a deal at the start. <em>Neither of us falls.</em>
+      </p>
+      <p class="para reveal" data-d="1">
+        I broke my side of it. You didn't. That part was always on me, and I'm not
+        going to pretend otherwise.
+      </p>
+    </div>
+  </section>
 
-        for (let i = 0; i < numStars; i++) {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            
-            // Randomize position, size, and animation timing
-            const x = Math.random() * 100;
-            const y = Math.random() * 100;
-            const size = Math.random() * 2 + 1;
-            const duration = Math.random() * 3 + 2; // 2s to 5s
-            const delay = Math.random() * 5;
+  <!-- ══════════ WHY MOON ══════════ -->
+  <section class="quiet">
+    <div class="narrow">
+      <p class="chapter-label reveal">why I call you that</p>
+      <div class="rule reveal"></div>
+      <p class="statement statement--sm split reveal">
+        Almost everything I remember about you <em>happened at night.</em>
+      </p>
+      <p class="para reveal" data-d="1" style="text-align:left;max-width:none;margin-top:var(--space-4)">
+        The walks after dark. Sitting in that Kerala hotel till they were
+        basically waiting for us to leave. Navaratri lights. The night outs. You
+        falling asleep on my lap while everyone else was still awake.
+      </p>
+      <p class="para reveal" data-d="2" style="text-align:left;max-width:none">
+        That's the whole reason. You're the thing that showed up when it got dark
+        and made it easier to be there. I never needed you to be the sun. The
+        moon doesn't burn anything — it just shows up, quietly, and the night
+        stops feeling so long.
+      </p>
+      <p class="note reveal" data-d="3">
+        So that's what I call you. My moon.
+      </p>
+    </div>
+  </section>
 
-            star.style.left = `${x}vw`;
-            star.style.top = `${y}vh`;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.setProperty('--duration', `${duration}s`);
-            star.style.setProperty('--delay', `${delay}s`);
+  <!-- ══════════ MEMORIES ══════════ -->
+  <section>
+    <div class="wrap">
+      <p class="chapter-label reveal">things I still think about</p>
+      <div class="rule reveal"></div>
 
-            starsContainer.appendChild(star);
+      <div class="memories">
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">01</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">The sticker fights</h2>
+            <p class="memory__text">
+              Right at the very beginning. Completely pointless, and somehow the
+              best ten minutes of the day. That was the first time I thought,
+              okay — this one's different.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">02</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">Movie nights in college</h2>
+            <p class="memory__text">
+              Bad screens, worse sound, nobody caring. I stopped watching the
+              movie somewhere in the middle most times.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">03</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">That Kerala hotel</h2>
+            <p class="memory__text">
+              The proper traditional one. Banana leaf, too many things on it,
+              both of us eating way past full and still ordering more. You
+              laughing at how I was doing it wrong the entire time.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">04</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">The night outs</h2>
+            <p class="memory__text">
+              Three in the morning conversations that made no sense the next day
+              and complete sense at the time.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">05</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">Feeding you biryani</h2>
+            <p class="memory__text">
+              Such a small thing. I don't know why it stayed with me the way it
+              did, but it did. It really did.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">06</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">Pahadi</h2>
+            <p class="memory__text">
+              Cold, loud, everyone half-mad. You in the middle of all of it.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">07</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">The drinks</h2>
+            <p class="memory__text">
+              Where the honest stuff came out, mostly. Some of it I meant more
+              than I let on.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">08</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">Demon Slayer</h2>
+            <p class="memory__text">
+              You had opinions. Strong ones. I mostly just liked watching you
+              have them.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">09</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">Navaratri</h2>
+            <p class="memory__text">
+              Lights, noise, too many people, and somehow I always knew exactly
+              where you were standing.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">10</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">You, asleep on my lap</h2>
+            <p class="memory__text">
+              I didn't move for a long time. I didn't want to wake you up, and I
+              didn't want it to end. Both things at once.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">11</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">The evening walks</h2>
+            <p class="memory__text">
+              No plan, no destination. Just walking until it got dark and one of
+              us finally said we should probably head back.
+            </p>
+          </div>
+        </article>
+
+        <article class="memory">
+          <span class="memory__num" aria-hidden="true">12</span>
+          <div class="memory__inner">
+            <div class="memory__dot" aria-hidden="true"></div>
+            <h2 class="memory__title">Canteen food</h2>
+            <p class="memory__text">
+              Genuinely not good food. Best meals I had that year. I still can't
+              walk in there without looking at our table.
+            </p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ EVERY PLACE ══════════ -->
+  <section>
+    <div class="narrow">
+      <p class="statement split reveal">
+        Now I go to those places and <em>you're the only thing I remember.</em>
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════ THE HONEST PART ══════════ -->
+  <section class="quiet">
+    <div class="narrow">
+      <p class="chapter-label reveal">the part I'm not proud of</p>
+      <div class="rule reveal"></div>
+
+      <p class="note reveal">
+        You called me to things. I didn't come.
+      </p>
+
+      <p class="para reveal" data-d="1" style="text-align:left;max-width:none">
+        Not once — again and again. You'd invite me and I'd find a reason, and I
+        told myself it was fine because there'd be a next time. I made you cry.
+        I know that. I've made mistakes with you that I can't undo by explaining
+        them away, so I won't try.
+      </p>
+
+      <p class="para reveal" data-d="2" style="text-align:left;max-width:none">
+        And then I told you how I felt, knowing the deal we'd made, knowing you
+        didn't feel the same. That wasn't fair to put on you either. You were
+        honest with me. That took more courage than what I did.
+      </p>
+
+      <p class="note reveal" data-d="3">
+        I'm sorry. Properly — not as a way of asking for something back.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════ THE YES ══════════ -->
+  <section>
+    <div class="narrow">
+      <p class="para reveal" style="margin-bottom:var(--space-3)">
+        You asked me if I still want the friendship.
+      </p>
+      <div class="yes reveal" data-d="1">
+        <p class="yes__word">Yes</p>
+        <p class="para" style="margin-top:var(--space-3)">
+          Yes. Without conditions, without waiting for it to turn into something
+          else. I'd rather have you in my life as my friend than have the
+          version of this where I lose you completely.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════ FOUR MONTHS ══════════ -->
+  <section>
+    <div class="narrow">
+      <p class="chapter-label reveal">what's left</p>
+      <div class="rule reveal"></div>
+      <p class="statement split reveal">
+        This sem I have <em>four months</em> left.
+      </p>
+      <p class="para reveal" data-d="1">
+        Which is four full moons. That's all that's actually left of this —
+        and I've already wasted enough of them not showing up.
+      </p>
+
+      <div class="months">
+        <div class="month reveal" data-d="1">
+          <div class="phase phase--1" aria-hidden="true"></div>
+          <div class="month__l">show up</div>
+        </div>
+        <div class="month reveal" data-d="1">
+          <div class="phase phase--2" aria-hidden="true"></div>
+          <div class="month__l">show up</div>
+        </div>
+        <div class="month reveal" data-d="2">
+          <div class="phase phase--3" aria-hidden="true"></div>
+          <div class="month__l">show up</div>
+        </div>
+        <div class="month reveal" data-d="2">
+          <div class="phase phase--4" aria-hidden="true"></div>
+          <div class="month__l">every time</div>
+        </div>
+      </div>
+
+      <p class="para reveal" data-d="3" style="margin-top:var(--space-5)">
+        Every event you call me to, I'm there. Every single one. Not to prove
+        anything to you — just because I finally understand what I was throwing
+        away.
+      </p>
+    </div>
+  </section>
+
+  <!-- ══════════ ENDING ══════════ -->
+  <section class="end">
+    <div class="narrow">
+      <div class="moon reveal" aria-hidden="true" style="width:clamp(80px,18vw,120px)"></div>
+      <p class="statement split reveal" data-d="1">
+        You're my <em>incomplete dream.</em>
+      </p>
+      <p class="para reveal" data-d="2">
+        And I think I'm okay with it staying that way — as long as you're still
+        somewhere in the sky.
+      </p>
+      <p class="sign reveal" data-d="3">still yours to call on, my moon.<br>— me</p>
+    </div>
+  </section>
+
+  <footer>made this instead of sending a long text</footer>
+
+</main>
+
+<script>
+(function(){
+  'use strict';
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- starfield ---- */
+  (function(){
+    var host = document.getElementById('stars');
+    if(!host || reduced) return;
+    var count = window.innerWidth < 760 ? 40 : 80;
+    var frag = document.createDocumentFragment();
+    for(var i=0;i<count;i++){
+      var s = document.createElement('span');
+      s.className = 'star';
+      s.style.left = (Math.random()*100) + '%';
+      s.style.top  = (Math.random()*100) + '%';
+      s.style.animationDelay = (Math.random()*4) + 's';
+      var sz = Math.random() < 0.22 ? 3 : 2;
+      s.style.width = sz + 'px';
+      s.style.height = sz + 'px';
+      frag.appendChild(s);
+    }
+    host.appendChild(frag);
+  })();
+
+  /* ---- split key lines into words ---- */
+  document.querySelectorAll('.split').forEach(function(el){
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var nodes = [], n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    nodes.forEach(function(node){
+      if(!node.nodeValue.trim()) return;
+      var frag = document.createDocumentFragment();
+      node.nodeValue.split(/(\s+)/).forEach(function(tok){
+        if(!tok.trim()){ frag.appendChild(document.createTextNode(tok)); return; }
+        var s = document.createElement('span');
+        s.className = 'word';
+        s.textContent = tok;
+        frag.appendChild(s);
+      });
+      node.parentNode.replaceChild(frag, node);
+    });
+    el.querySelectorAll('.word').forEach(function(w,i){
+      w.style.transitionDelay = (i * 65) + 'ms';
+    });
+  });
+
+  /* ---- reveal on scroll ---- */
+  if(reduced){
+    document.querySelectorAll('.reveal,.split,.memory').forEach(function(el){ el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
         }
+      });
+    }, { threshold:0.18, rootMargin:'0px 0px -8% 0px' });
 
-        const numShootingStars = 6;
-        for (let i = 0; i < numShootingStars; i++) {
-            const shootingStar = document.createElement('div');
-            shootingStar.classList.add('shooting-star');
-            
-            const x = Math.random() * 150; // Can start off-screen right
-            const y = Math.random() * 50;  // Start in top half
-            const delay = Math.random() * 8; // Random delay
-            const duration = Math.random() * 2 + 1.5; // Random speed
+    document.querySelectorAll('.reveal,.split').forEach(function(el){ io.observe(el); });
 
-            shootingStar.style.left = `${x}vw`;
-            shootingStar.style.top = `${y}vh`;
-            shootingStar.style.animationDelay = `${delay}s`;
-            shootingStar.style.animationDuration = `${duration}s`;
-
-            starsContainer.appendChild(shootingStar);
+    /* memory cards fire a bit earlier so the 3D swing is fully visible */
+    var io3d = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add('in');
+          io3d.unobserve(e.target);
         }
+      });
+    }, { threshold:0.12, rootMargin:'0px 0px -14% 0px' });
 
-        // Generate floating fireflies/dust
-        const numFireflies = 25;
-        for (let i = 0; i < numFireflies; i++) {
-            const firefly = document.createElement('div');
-            firefly.classList.add('firefly');
-            
-            const size = Math.random() * 3 + 1;
-            firefly.style.width = `${size}px`;
-            firefly.style.height = `${size}px`;
-            firefly.style.left = `${Math.random() * 100}vw`;
-            
-            firefly.style.setProperty('--duration', `${Math.random() * 15 + 10}s`); // 10s to 25s
-            firefly.style.setProperty('--delay', `${Math.random() * 10}s`);
-            
-            starsContainer.appendChild(firefly);
-        }
+    document.querySelectorAll('.memory').forEach(function(el){ io3d.observe(el); });
+  }
 
-        // Scroll Event Listener for Progress Bar and Fading Moon
-        window.addEventListener('scroll', () => {
-            // 1. Update Scroll Progress Bar
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.getElementById("progressBar").style.width = scrolled + "%";
+  /* ---- 3D pointer tilt on memory cards ---- */
+  var finePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(finePointer && !reduced){
+    document.querySelectorAll('.memory').forEach(function(card){
+      var raf = null;
 
-            // 2. Moon Parallax and Fade Effect
-            // The moon slowly disappears as she scrolls down, representing the "no moon" reality
-            const moon = document.getElementById("moon");
-            if (moon) {
-                // Fades out completely by the time she is 80% down the page
-                const fadeRate = 1 - (winScroll / (height * 0.8)); 
-                const moveUp = winScroll * 0.4; // Slowly moves up the screen
-                
-                moon.style.opacity = Math.max(0, fadeRate);
-                moon.style.transform = `translateY(-${moveUp}px)`;
-            }
+      card.addEventListener('pointermove', function(ev){
+        if(!card.classList.contains('in')) return;
+        if(raf) return;
+        raf = requestAnimationFrame(function(){
+          var r  = card.getBoundingClientRect();
+          var px = (ev.clientX - r.left) / r.width  - 0.5;   /* -0.5 .. 0.5 */
+          var py = (ev.clientY - r.top)  / r.height - 0.5;
+          card.style.transition = 'transform 120ms linear, box-shadow 300ms ease, border-color 300ms ease';
+          card.style.transform  =
+            'perspective(900px) rotateY(' + (px * 9).toFixed(2) + 'deg) rotateX(' +
+            (-py * 7).toFixed(2) + 'deg) translateZ(14px)';
+          raf = null;
         });
+      });
 
-        // Interactive Parallax on Mouse Move / Touch
-        function handleParallax(clientX, clientY) {
-            const xAxis = (window.innerWidth / 2 - clientX) / 60;
-            const yAxis = (window.innerHeight / 2 - clientY) / 60;
-            
-            document.getElementById('stars').style.transform = `translate(${xAxis}px, ${yAxis}px)`;
-            
-            const mountains = document.getElementById('mountains');
-            if(mountains) {
-                mountains.style.transform = `translate(${xAxis * 0.3}px, 0px)`; // Subtle shift for mountains
-            }
-        }
+      card.addEventListener('pointerleave', function(){
+        card.style.transition = 'transform 650ms var(--ease), box-shadow 600ms ease, border-color 600ms ease';
+        card.style.transform  = 'perspective(900px) rotateY(0deg) rotateX(0deg) translateZ(0)';
+      });
+    });
+  }
 
-        document.addEventListener('mousemove', (e) => {
-            handleParallax(e.clientX, e.clientY);
-        });
+  /* ---- scroll progress + parallax (rAF-throttled) ---- */
+  var bar = document.getElementById('bar');
+  var glows = Array.prototype.slice.call(document.querySelectorAll('.glow'));
+  var nums  = Array.prototype.slice.call(document.querySelectorAll('.memory__num'));
+  var moons = Array.prototype.slice.call(document.querySelectorAll('.moon'));
+  var ticking = false;
+  var vh = window.innerHeight;
 
-        document.addEventListener('touchmove', (e) => {
-            if(e.touches.length > 0) {
-                handleParallax(e.touches[0].clientX, e.touches[0].clientY);
-            }
-        });
+  function onScroll(){
+    var y = window.scrollY || window.pageYOffset;
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
 
-        // Intersection Observer to trigger fade-in animations on scroll
-        document.addEventListener("DOMContentLoaded", function() {
-            const elements = document.querySelectorAll('.fade-element');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    // When the element enters the viewport
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { 
-                threshold: 0.25, // Trigger when 25% of the element is visible
-                rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the bottom
-            });
+    if(!reduced){
+      glows.forEach(function(g){
+        var sp = parseFloat(g.dataset.speed) || 0;
+        g.style.transform = 'translate3d(0,' + (y * sp) + 'px,0)';
+      });
 
-            elements.forEach(element => {
-                observer.observe(element);
-            });
-        });
-    </script>
+      /* ghost numbers drift on a different depth plane = parallax */
+      nums.forEach(function(n){
+        var r = n.getBoundingClientRect();
+        if(r.bottom < -200 || r.top > vh + 200) return;
+        var prog = (r.top + r.height/2 - vh/2) / vh;   /* -1 .. 1 */
+        n.style.transform = 'translateZ(-60px) translateY(' + (prog * -42).toFixed(1) + 'px)';
+      });
+
+      /* the moon drifts slightly and rotates as you scroll */
+      moons.forEach(function(m){
+        if(!m.classList.contains('in')) return;   /* let the reveal finish first */
+        var r = m.getBoundingClientRect();
+        if(r.bottom < -200 || r.top > vh + 200) return;
+        var prog = (r.top + r.height/2 - vh/2) / vh;
+        m.style.transform = 'translateY(' + (prog * -26).toFixed(1) + 'px) rotate(' + (prog * 8).toFixed(1) + 'deg)';
+      });
+    }
+    ticking = false;
+  }
+
+  window.addEventListener('resize', function(){ vh = window.innerHeight; }, { passive:true });
+
+  window.addEventListener('scroll', function(){
+    if(!ticking){ window.requestAnimationFrame(onScroll); ticking = true; }
+  }, { passive:true });
+
+  onScroll();
+
+  /* ---- hide photo hint once a real <img> is added ---- */
+  document.querySelectorAll('.memory__media').forEach(function(m){
+    if(m.querySelector('img')){
+      var num = m.querySelector('.memory__num');
+      var hint = m.querySelector('.memory__hint');
+      if(num) num.style.display = 'none';
+      if(hint) hint.style.display = 'none';
+    }
+  });
+})();
+</script>
 </body>
 </html>
